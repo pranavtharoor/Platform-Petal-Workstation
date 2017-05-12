@@ -63,6 +63,7 @@ module.exports = function(passport) {
                         newUser.google.name = profile.displayName;
                         newUser.google.email = profile.emails[0].value;
 
+                        console.log(newUser);
 
                         newUser.save(function(err){
                             if(err)
