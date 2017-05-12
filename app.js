@@ -29,6 +29,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./config/passport')(passport);
+require('./routes/auth')(app, passport);
 
 app.use('/users', users);
 

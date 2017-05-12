@@ -4,20 +4,23 @@ const config = require('../config/database');
 
 // User Schema
 const UserSchema = mongoose.Schema({
-	name: {
-		type: String
+	name: {type: String},
+	email: {type: String},
+	username: {type: String},
+	password: {type: String},
+
+	facebook: {
+		id: {type: String},
+		token: {type: String},
+		email: {type: String},
+		name: {type: String}
 	},
-	email: {
-		type: String,
-		required: true
-	},
-	username: {
-		type: String,
-		required: true
-	},
-	password: {
-		type: String,
-		required: true
+
+	google: {
+		id: {type: String},
+		token: {type: String},
+		email: {type: String},
+		name: {type: String}
 	}
 });
 

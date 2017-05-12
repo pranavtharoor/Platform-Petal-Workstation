@@ -1,5 +1,10 @@
 <div *ngIf="user">
 	{{ user.name }}<br />
-	Username: {{ user.name }}<br />
+	Username: {{ user.username }}<br />
 	Email: {{ user.email }}
+
+	{{ user.facebook.name }}<br />
+	Username: {{ user.facebook.id }}<br />
+	Email: {{ user.facebook.email }}
+	<br />Token: {{ user.facebook.token }}
 </div>

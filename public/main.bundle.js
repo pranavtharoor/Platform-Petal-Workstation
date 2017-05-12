@@ -532,10 +532,6 @@ var appRoutes = [
         path: 'profile',
         component: __WEBPACK_IMPORTED_MODULE_4__components_profile_profile_component__["a" /* ProfileComponent */],
         canActivate: [__WEBPACK_IMPORTED_MODULE_6__guards_auth_guard__["a" /* AuthGuard */]]
-    },
-    {
-        path: '**',
-        redirectTo: ''
     }
 ];
 var routing = __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* RouterModule */].forRoot(appRoutes);
@@ -684,7 +680,7 @@ module.exports = "\n<a [routerLinkActive]=\"['active']\" [routerLinkActiveOption
 /***/ 685:
 /***/ (function(module, exports) {
 
-module.exports = "<form (submit)=\"onLoginSubmit()\">\n\t<input type=\"text\" name=\"username\" [(ngModel)]=\"username\" />\n\t<input type=\"password\" name=\"password\" [(ngModel)]=\"password\" />\n\t<input type=\"submit\" />\n</form>"
+module.exports = "<form (submit)=\"onLoginSubmit()\">\n\t<input type=\"text\" name=\"username\" [(ngModel)]=\"username\" />\n\t<input type=\"password\" name=\"password\" [(ngModel)]=\"password\" />\n\t<input type=\"submit\" />\n</form>\n<a href=\"/auth/facebook\">FB</a><br />\n<a href=\"/auth/google\">G+</a>"
 
 /***/ }),
 
@@ -698,7 +694,7 @@ module.exports = "<a [routerLinkActive]=\"['active']\" [routerLinkActiveOptions]
 /***/ 687:
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"user\">\n\t{{ user.name }}<br />\n\tUsername: {{ user.name }}<br />\n\tEmail: {{ user.email }}\n</div>"
+module.exports = "<div *ngIf=\"user\">\n\t{{ user.name }}<br />\n\tUsername: {{ user.username }}<br />\n\tEmail: {{ user.email }}\n\n\t{{ user.facebook.name }}<br />\n\tUsername: {{ user.facebook.id }}<br />\n\tEmail: {{ user.facebook.email }}\n\t<br />Token: {{ user.facebook.token }}\n</div>"
 
 /***/ }),
 

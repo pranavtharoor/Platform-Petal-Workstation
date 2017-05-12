@@ -30,10 +30,10 @@ const appRoutes: Routes = [
 		path: 'profile',
 		component: ProfileComponent,
 		canActivate: [AuthGuard]
-	},
-	{
-		path: '**',
-		redirectTo: ''
+	// },
+	// {
+	// 	path: '**',
+	// 	redirectTo: ''
 	}
 ]
 
