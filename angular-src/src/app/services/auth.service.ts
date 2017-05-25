@@ -47,9 +47,27 @@ export class AuthService {
   	.map(res => res.json());
   }
 
+  updateProfile(profile) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/updateprofile', profile, {headers: headers})
+    .map(res => res.json());
+  }
+
   loadToken() {
   	const token = localStorage.getItem('id_token');
   	this.authToken = token;
+  }
+
+  setLastLogin() {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.get('http://localhost:3000/users/setlogin', {headers: headers})
+    .map(res => res.json());
   }
 
   loggedIn() {

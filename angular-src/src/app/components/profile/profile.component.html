@@ -1,10 +1,14 @@
-<div *ngIf="user">
-	{{ user.name }}<br />
-	Username: {{ user.username }}<br />
-	Email: {{ user.email }}
-
-	{{ user.facebook.name }}<br />
-	Username: {{ user.facebook.id }}<br />
-	Email: {{ user.facebook.email }}
-	<br />Token: {{ user.facebook.token }}
+<div *ngIf="profile">
+	<div *ngIf="profile.name">Name:{{ profile.name }}</div>
+	<div *ngIf="profile.dob">DOB:{{ profile.dob }}</div>
+	<div *ngIf="profile.gender">Gender:{{ profile.gender }}</div>
+	<div *ngIf="profile.address">
+		Address:
+		<div *ngIf="profile.address.street">{{ profile.address.street }}</div>
+		<div *ngIf="profile.address.city">{{ profile.address.city }}</div>
+		<div *ngIf="profile.address.state">{{ profile.address.state }}</div>
+		<div *ngIf="profile.address.country">{{ profile.address.country }}</div>
+		<div *ngIf="profile.address.pinCode">{{ profile.address.state }}</div>
+	</div>
 </div>
+<a href="/editprofile">Edit</a>

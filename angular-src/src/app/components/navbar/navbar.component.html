@@ -1,6 +1,9 @@
-<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/']">Home</a>
-<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/login']" *ngIf="!authService.loggedIn()">Login</a>
-<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/register']" *ngIf="!authService.loggedIn()">Register</a>
-<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/dashboard']" *ngIf="authService.loggedIn()">Dashboard</a>
-<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/profile']" *ngIf="authService.loggedIn()">Profile</a>
-<a (click)="onLogoutClick()" href="#" *ngIf="authService.loggedIn()">Logout</a>
+<nav>
+	<div class="icon"></div>
+	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/']">Home</a>
+	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/login']" *ngIf="!authService.loggedIn()">Login</a>
+	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/register']" *ngIf="!authService.loggedIn()">Register</a>
+	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/dashboard']" *ngIf="authService.loggedIn()">Dashboard</a>
+	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/profile']" *ngIf="authService.loggedIn()">Profile</a>
+	<a (click)="onLogoutClick()" href="#" *ngIf="authService.loggedIn()">Logout</a>
+</nav>

@@ -1,0 +1,13 @@
+Edit Profile<br />
+<form (submit)="onEditProfileSubmit()">
+	Name: <input type="text" name="email" [(ngModel)]="name" /><br />
+	DOB: <input type="text" name="dob" [(ngModel)]="dob" /><br />
+	Gender: <input type="text" name="gender" [(ngModel)]="gender" /><br />
+	Address: <br />
+	Street: <input type="text" name="street" [(ngModel)]="street" /><br />
+	City: <input type="text" name="city" [(ngModel)]="city" /><br />
+	State: <input type="text" name="state" [(ngModel)]="state" /><br />
+	Country: <input type="text" name="country" [(ngModel)]="country" /><br />
+	Pin Code: <input type="text" name="pinCode" [(ngModel)]="pinCode" /><br />
+	<input type="submit" />
+</form>

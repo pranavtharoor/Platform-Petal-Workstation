@@ -8,6 +8,7 @@ const UserSchema = mongoose.Schema({
 	email: {type: String},
 	username: {type: String},
 	password: {type: String},
+	lastlogin: {type: String},
 
 	facebook: {
 		id: {type: String},
@@ -50,4 +51,8 @@ module.exports.comparePassword = function(candidatePassword, hash, callback) {
 		if(err) throw err;
 		callback(null, isMatch);
 	});
+}
+
+module.exports.updateUser = function(username, update, callback) {
+	User.findOneAndUpdate({username: username}, update, callback);
 }

@@ -31,8 +31,20 @@ export class LoginComponent implements OnInit {
   	this.authService.authenticateUser(user).subscribe(data => {
   		if(data.success) {
   			this.authService.storeUserData(data.token, data.user);
-  		  	this.flashMessage.show('Logged in', {cssClass: 'color-success', timeout: 5000});
-  			this.router.navigate(['dashboard']);	
+  		  this.flashMessage.show('Logged in', {cssClass: 'color-success', timeout: 5000});
+        if(data.user.lastlogin == 'never') {
+          this.authService.setLastLogin().subscribe(success => {
+            }, err => {
+              console.log(err);
+            });
+          this.router.navigate(['editprofile']);
+        } else{
+          this.authService.setLastLogin().subscribe(success => {
+            }, err => {
+              console.log(err);
+            });
+          this.router.navigate(['dashboard']);
+        }
   		} else {
   			this.flashMessage.show(data.msg, {cssClass: 'color-danger', timeout: 5000});
   			this.router.navigate(['login']);

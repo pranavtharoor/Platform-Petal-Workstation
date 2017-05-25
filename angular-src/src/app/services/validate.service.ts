@@ -20,4 +20,12 @@ export class ValidateService {
   	return re.test(email);
   }
 
+  checkPasswords(password, repassword) {
+  	if(password == repassword) {
+  		return true;
+  	} else {
+  		return false;
+  	}
+  }
+
 }
