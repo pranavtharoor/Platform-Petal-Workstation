@@ -11,6 +11,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ProjectsComponent } from './components/projects/projects.component';
 
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
@@ -27,7 +28,8 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     HomeComponent,
     ProfileComponent,
     DashboardComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    ProjectsComponent
   ],
   imports: [
     BrowserModule,

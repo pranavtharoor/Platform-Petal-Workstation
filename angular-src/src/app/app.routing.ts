@@ -7,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { ProjectsComponent } from './components/projects/projects.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const appRoutes: Routes = [
@@ -30,6 +31,11 @@ const appRoutes: Routes = [
 	{
 		path: 'editprofile',
 		component: EditProfileComponent,
+		canActivate: [AuthGuard]
+	},
+	{
+		path: 'projects',
+		component: ProjectsComponent,
 		canActivate: [AuthGuard]
 	},
 	{

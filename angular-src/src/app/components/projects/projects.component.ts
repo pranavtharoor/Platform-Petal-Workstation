@@ -23,7 +23,7 @@ export class ProjectsComponent implements OnInit {
   ngOnInit() {
 
   	this.authService.getProjects().subscribe(projects => {
-  		this.projects = projects;
+  		  this.projects = projects;
   	}, err => {
   		console.log(err);
   	});

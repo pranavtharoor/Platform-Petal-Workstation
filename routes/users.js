@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const User = require('../models/user');
 const Profile = require('../models/profile');
+const Project = require('../models/project');
 
 router.post('/register', (req, res) => {
 	let newUser = new User({
@@ -49,9 +50,7 @@ router.post('/authenticate', (req, res) => {
 					token: 'JWT ' + token,
 					user: {
 						id: user._id,
-						name: user.name,
 						username: user.username,
-						email: user.email,
 						lastlogin: user.lastlogin
 					}
 				});
@@ -120,6 +119,39 @@ router.post('/updateprofile', passport.authenticate('jwt', {session: false}), (r
 				}
 			});
 		}
+	});
+});
+
+router.post('/addproject', passport.authenticate('jwt', {session: false}), (req, res) => {
+	console.log(req.body);
+	Profile.getProfileByUsername(req.user.username, (err, profile) => {
+		if(err) throw err;
+		if(profile) {
+			let newProject = new Project({
+				username: req.user.username,
+				name: profile.name,
+				description: req.body.description,
+				projectName: req.body.projectName,
+				languages: req.body.languages,
+				tags: req.body.tags
+			});
+			Project.addProject(newProject, (err, project) => {
+				if(err) {
+					res.json({success: false, msg: 'Failed to add project'});
+				} else {
+					res.json({success: true, msg: 'Project added'});
+				}
+			});
+		} else {
+			res.json({success: false ,msg: 'Add profile details before making projects'})
+		}
+	});
+});
+
+router.get('/projects', passport.authenticate('jwt', {session: false}), (req, res) => {
+	Project.getProjects((err, projects) => {
+		if(err) throw err;
+		res.json(projects);
 	});
 });
 
