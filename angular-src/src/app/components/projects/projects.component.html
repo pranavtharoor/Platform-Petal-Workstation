@@ -1,0 +1,31 @@
+Ad pdroject:<br />
+<form (submit)="onProjectSubmit()">
+	Project Name: <input type="text" name="projectName" [(ngModel)]="projectName" /><br />
+
+	Description: <input type="text" name="description" [(ngModel)]="description" /><br />
+
+	Tags:
+	<div>
+		<input type="text" name="tags[i]" [(ngModel)]="tags[i]" />
+	</div>
+	<button type="button" (click)="addTag()">+</button><br />
+
+	Languages:
+	<div>
+		<input type="text" name="languages" [(ngModel)]="languages" />
+	</div>
+	<button type="button" (click)="addLanguage()">+</button><br />
+
+	<input type="submit" />
+</form>
+<br /><br />
+Projects:
+<br /><br />
+<div *ngFor="let project of projects">
+	<div>Project Name: {{ project.projectName }}</div>
+	<div>Description: {{ project.description }}</div>
+	<div>Project by: {{ project.name }}</div>
+	<div>Languages: {{ project.languages }}</div>
+	<div>Tags: {{ project.tags }}</div>
+	<br />
+</div>
