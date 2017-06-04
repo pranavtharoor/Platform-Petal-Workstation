@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { routing } from './app.routing';
 
@@ -36,7 +36,8 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     FormsModule,
     HttpModule,
     routing,
-    FlashMessagesModule
+    FlashMessagesModule,
+    ReactiveFormsModule
   ],
   providers: [ValidateService, AuthService, AuthGuard],
   bootstrap: [AppComponent]

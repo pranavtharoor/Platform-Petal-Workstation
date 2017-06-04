@@ -1,23 +1,57 @@
-Ad pdroject:<br />
-<form (submit)="onProjectSubmit()">
-	Project Name: <input type="text" name="projectName" [(ngModel)]="projectName" /><br />
+Add project:<br />
 
-	Description: <input type="text" name="description" [(ngModel)]="description" /><br />
+<form [formGroup]="projectForm" novalidate (ngSubmit)="save(projectForm._value)">
 
-	Tags:
-	<div>
-		<input type="text" name="tags" [(ngModel)]="tags" />
-	</div>
-	<button type="button" (click)="addTag()">+</button><br />
+    <div class="form-group">
+        <label>Project Name</label>
+        <input type="text" formControlName="projectName">
+        <small *ngIf="!projectForm.controls.projectName.valid" class="text-danger">
+            Project name is required (maximum 50 characters).
+        </small>
+    </div>
 
-	Languages:
-	<div>
-		<input type="text" name="languages" [(ngModel)]="languages" />
-	</div>
-	<button type="button" (click)="addLanguage()">+</button><br />
+    <div class="form-group">
+        <label>Description</label>
+        <input type="text" formControlName="description">
+        <small *ngIf="!projectForm.controls.description.valid" class="text-danger">
+            Description is required (maximum 300 characters).
+        </small>
+    </div>
 
-	<input type="submit" />
+    <div formArrayName="tags">
+    Tags
+        <div *ngFor="let tag of projectForm.controls.tags.controls; let i=index">
+            <span>
+                <span *ngIf="projectForm.controls.tags.controls.length > 1" 
+                    (click)="removeTag(i)">X
+                </span>
+            </span>
+
+            <span [formGroupName]="i">
+                 <input type="text" formControlName="tag">
+            </span>
+        </div>
+        <a *ngIf="projectForm.controls.tags.controls.length < 5" (click)="addTag()">+</a>
+    </div>
+
+    <div formArrayName="languages">
+    Languages
+        <div *ngFor="let language of projectForm.controls.languages.controls; let i=index">
+            <span>
+                <span *ngIf="projectForm.controls.languages.controls.length > 1" 
+                    (click)="removeLanguage(i)">X
+                </span>
+            </span>
+
+            <span [formGroupName]="i">
+                 <input type="text" formControlName="language">
+            </span>
+        </div>
+        <a (click)="addLanguage()">+</a>
+    </div>
+    <button type="submit" [disabled]="!projectForm.valid">Submit</button>
 </form>
+
 <br /><br />
 Projects:
 <br /><br />
@@ -25,7 +59,11 @@ Projects:
 	<div>Project Name: {{ project.projectName }}</div>
 	<div>Description: {{ project.description }}</div>
 	<div>Project by: {{ project.name }}</div>
-	<div>Languages: {{ project.languages }}</div>
-	<div>Tags: {{ project.tags }}</div>
+	<div>Languages: 
+        <span *ngFor="let language of project.languages">{{ language.language }} </span>
+    </div>
+	<div>Tags:
+        <span *ngFor="let tag of project.tags">{{ tag.tag }} </span>
+    </div>
 	<br />
 </div>
