@@ -9,7 +9,9 @@ const projectSchema = mongoose.Schema({
 	description: {type:String},
 	languages: {type: Array},
 	tags: {type: Array}
-})
+});
+
+projectSchema.index({name: 'text', projectName: 'text', description: 'text', tags: 'text', languages: 'text'});
 
 const Project = module.exports = mongoose.model('Project', projectSchema);
 
@@ -19,4 +21,17 @@ module.exports.getProjects = function(callback) {
 
 module.exports.addProject = function(newProject, callback) {
 	newProject.save(callback);
-}
+};
+
+module.exports.getProjectsFullTextSearch = function(searchString, callback) {
+	Project.find({$text: {$search: searchString}}, callback);
+};
+
+module.exports.getProjectsRegexSearch = function(searchString, callback) {
+	const regex = new RegExp(escapeRegex(searchString), 'gi');
+	Project.find({$or:[{description: regex}, {name: regex}, {projectName: regex}, {tags: regex}, {languages: regex}]}, callback);
+};
+
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};

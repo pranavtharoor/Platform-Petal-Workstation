@@ -53,6 +53,11 @@ Add project:<br />
 </form>
 
 <br /><br />
+<form (submit)="onSearchSubmit()">
+    Search: <input type="text" name="searchString" (keyup)="onSearchSubmit()" [(ngModel)]="searchString" />
+    <!-- <input type="submit" /> -->
+</form>
+<br /><br />
 Projects:
 <br /><br />
 <div *ngFor="let project of projects">
@@ -60,10 +65,10 @@ Projects:
 	<div>Description: {{ project.description }}</div>
 	<div>Project by: {{ project.name }}</div>
 	<div>Languages: 
-        <span *ngFor="let language of project.languages">{{ language.language }} </span>
+        <span *ngFor="let language of project.languages">{{ language }} </span>
     </div>
 	<div>Tags:
-        <span *ngFor="let tag of project.tags">{{ tag.tag }} </span>
+        <span *ngFor="let tag of project.tags">{{ tag }} </span>
     </div>
 	<br />
 </div>

@@ -98,8 +98,6 @@ router.post('/updateprofile', passport.authenticate('jwt', {session: false}), (r
 			pinCode: req.body.pinCode
 		}
 	}
-	console.log(req.body);
-	console.log(newProfile);
 	Profile.getProfileByUsername(req.user.username, (err, profile) => {
 		if(err) throw err;
 		if(profile) {
@@ -123,17 +121,24 @@ router.post('/updateprofile', passport.authenticate('jwt', {session: false}), (r
 });
 
 router.post('/addproject', passport.authenticate('jwt', {session: false}), (req, res) => {
-	console.log(req.body);
 	Profile.getProfileByUsername(req.user.username, (err, profile) => {
 		if(err) throw err;
+		var tags = [];
+		var languages = [];
 		if(profile) {
+			for(var i = 0; i < req.body.tags.length; i++) {
+				tags.push(req.body.tags[i].tag);
+			}
+			for(var i = 0; i < req.body.languages.length; i++) {
+				languages.push(req.body.languages[i].language);
+			}
 			let newProject = new Project({
 				username: req.user.username,
 				name: profile.name,
 				description: req.body.description,
 				projectName: req.body.projectName,
-				languages: req.body.languages,
-				tags: req.body.tags
+				languages: languages,
+				tags: tags
 			});
 			Project.addProject(newProject, (err, project) => {
 				if(err) {
@@ -153,6 +158,20 @@ router.get('/projects', passport.authenticate('jwt', {session: false}), (req, re
 		if(err) throw err;
 		res.json(projects);
 	});
+});
+
+router.post('/search', passport.authenticate('jwt', {session: false}), (req, res) => {
+	var searchString = req.body.searchString;
+	
+	Project.getProjectsRegexSearch(searchString, function(err, projects) {
+        if(err) throw err;
+        else res.json(projects);
+    });
+
+	// Project.getProjectsFullTextSearch(searchString, (err, projects) => {
+	// 	if(err) throw err;
+	// 	res.json(projects);
+	// });
 });
 
 router.get('/setlogin', passport.authenticate('jwt', {session: false}), (req, res) => {

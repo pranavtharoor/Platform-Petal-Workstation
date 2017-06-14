@@ -25,7 +25,6 @@ module.exports = function(passport) {
 	opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
 	opts.secretOrKey = config.secret;
 	passport.use(new JwtStrategy(opts, (jwt_payload, done) => {
-		console.log(jwt_payload);
 		User.getUserById(jwt_payload._doc._id, (err, user) => {
 			if(err) {
 				return done(err, false);
@@ -63,8 +62,6 @@ module.exports = function(passport) {
                         newUser.google.name = profile.displayName;
                         newUser.google.email = profile.emails[0].value;
 
-                        console.log(newUser);
-
                         newUser.save(function(err){
                             if(err)
                                 throw err;
@@ -98,8 +95,6 @@ module.exports = function(passport) {
                         newUser.facebook.email = profile.emails[0].value;
                         newUser.facebook.name = profile.displayName;
 
-                        console.log(newUser);
-                        
                         newUser.save(function(err) {
                             if (err)
                                 throw err;

@@ -88,6 +88,15 @@ export class AuthService {
     .map(res => res.json());
   }
 
+  getProjectsAfterSearch(searchString) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/search', {searchString: searchString}, {headers: headers})
+    .map(res => res.json());
+  }
+
   loggedIn() {
   	return tokenNotExpired('id_token');
   }

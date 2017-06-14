@@ -22,6 +22,7 @@ export class ProjectsComponent implements OnInit {
 
   projects: Object;  
   projectForm: FormGroup;
+  searchString: String;
 
   constructor(
   	private authService: AuthService,
@@ -31,11 +32,11 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit() {
 
-  	this.authService.getProjects().subscribe(projects => {
-  		  this.projects = projects;
-  	}, err => {
-  		console.log(err);
-  	});
+    this.authService.getProjects().subscribe(projects => {
+        this.projects = projects;
+    }, err => {
+      console.log(err);
+    })
 
     this.projectForm = this._fb.group({
       projectName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -96,6 +97,25 @@ export class ProjectsComponent implements OnInit {
         this.flashMessage.show(data.msg, {cssClass: 'color-danger', timeout: 3000});
       }
     });
+  }
+
+  onSearchSubmit() {
+
+  if(this.searchString == '') {
+
+    this.authService.getProjects().subscribe(projects => {
+        this.projects = projects;
+    }, err => {
+      console.log(err);
+    });
+
+  } else {
+      this.authService.getProjectsAfterSearch(this.searchString).subscribe(projects => {
+          this.projects = projects;
+      }, err => {
+        console.log(err);
+      });
+    }
   }
 
 }
