@@ -15,9 +15,12 @@ import { ProjectsComponent } from './components/projects/projects.component';
 
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
+import { SocketioService } from './services/socketio.service';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { ConnectionsComponent } from './components/connections/connections.component';
+
 
 @NgModule({
   declarations: [
@@ -29,7 +32,8 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     ProfileComponent,
     DashboardComponent,
     EditProfileComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    ConnectionsComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +43,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     FlashMessagesModule,
     ReactiveFormsModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard],
+  providers: [ValidateService, AuthService, AuthGuard, SocketioService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

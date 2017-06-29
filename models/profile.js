@@ -32,7 +32,7 @@ const profileSchema = mongoose.Schema({
 		country:{type: String},
 		pinCode : {type: String}
 	}
-})
+});
 
 const Profile = module.exports = mongoose.model('Profile', profileSchema);
 

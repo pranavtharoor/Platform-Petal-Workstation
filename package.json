@@ -17,7 +17,9 @@
     "passport": "*",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
-    "passport-jwt": "*"
+    "passport-jwt": "*",
+    "socket.io": "^2.0.3",
+    "socketio-jwt": "^4.5.0"
   },
   "author": "Pranav Tharoor",
   "license": "ISC"

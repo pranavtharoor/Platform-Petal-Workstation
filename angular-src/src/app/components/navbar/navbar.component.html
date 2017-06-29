@@ -6,5 +6,6 @@
 	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/dashboard']" *ngIf="authService.loggedIn()">Dashboard</a>
 	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/profile']" *ngIf="authService.loggedIn()">Profile</a>
 	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/projects']" *ngIf="authService.loggedIn()">Projects</a>
+	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/connections']" *ngIf="authService.loggedIn()">Connections</a>
 	<a (click)="onLogoutClick()" href="#" *ngIf="authService.loggedIn()">Logout</a>
 </nav>

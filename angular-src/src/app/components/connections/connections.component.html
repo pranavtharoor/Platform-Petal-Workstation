@@ -1,0 +1,14 @@
+Connected:
+<div *ngFor="let connected of connections?.connected">{{connected.username}}<button (click)="removeConnection(connected.username)">Remove Connection</button></div>
+<br />
+Requests:
+<div *ngFor="let received of connections?.pending?.received">{{received.username}}<button (click)="acceptRequest(received.username)">Accept</button><button (click)="declineRequest(received.username)">Decline</button></div>
+<br />
+Sent requests:
+<div *ngFor="let sent of connections?.pending?.sent">{{sent.username}}</div>
+<br />
+Send req:
+<form (submit)="sendRequest()">
+	<input type="text" name="receiver" [(ngModel)]="receiver" />
+	<input type="submit" />
+</form>

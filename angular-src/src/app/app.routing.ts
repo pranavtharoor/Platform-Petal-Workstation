@@ -8,6 +8,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { ProjectsComponent } from './components/projects/projects.component';
+import { ConnectionsComponent } from './components/connections/connections.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const appRoutes: Routes = [
@@ -36,6 +37,11 @@ const appRoutes: Routes = [
 	{
 		path: 'projects',
 		component: ProjectsComponent,
+		canActivate: [AuthGuard]
+	},
+	{
+		path: 'connections',
+		component: ConnectionsComponent,
 		canActivate: [AuthGuard]
 	},
 	{

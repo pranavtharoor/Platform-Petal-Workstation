@@ -70,6 +70,12 @@ export class AuthService {
     .map(res => res.json());
   }
 
+  loggedIn() {
+    return tokenNotExpired('id_token');
+  }
+
+  // Projects
+
   addProject(newProject) {
     let headers = new Headers();
     this.loadToken();
@@ -97,8 +103,51 @@ export class AuthService {
     .map(res => res.json());
   }
 
-  loggedIn() {
-  	return tokenNotExpired('id_token');
+  // Connections
+
+  getConnections() {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.get('http://localhost:3000/users/connections', {headers: headers})
+    .map(res => res.json());
+  }
+
+  reqestConnection(receiver) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/requestconnection', {receiver: receiver}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  acceptRequest(sender) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/acceptrequest', {sender: sender}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  declineRequest(sender) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/declinerequest', {sender: sender}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  removeConnection(user) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/removeconnection', {user: user}, {headers: headers})
+    .map(res => res.json());
   }
 
 }
