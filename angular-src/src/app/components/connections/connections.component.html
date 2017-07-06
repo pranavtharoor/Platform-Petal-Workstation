@@ -1,3 +1,16 @@
+<div *ngIf="profile">
+	Profile: 
+<div>{{ profile?.username }}</div>
+<div>{{ profile?.name }}</div>
+<div>{{ profile?.dob }}</div>
+<div>{{ profile?.gender }}</div>
+<div>{{ profile?.address?.street }}</div>
+<div>{{ profile?.address?.city  }}</div>
+<div>{{ profile?.address?.state }}</div>
+<div>{{ profile?.address?.country }}</div>
+<div>{{ profile?.address?.pinCode  }}</div>
+</div>
+
 Connected:
 <div *ngFor="let connected of connections?.connected">{{connected.username}}<button (click)="removeConnection(connected.username)">Remove Connection</button></div>
 <br />
@@ -6,9 +19,20 @@ Requests:
 <br />
 Sent requests:
 <div *ngFor="let sent of connections?.pending?.sent">{{sent.username}}</div>
-<br />
-Send req:
-<form (submit)="sendRequest()">
-	<input type="text" name="receiver" [(ngModel)]="receiver" />
-	<input type="submit" />
+<br /><br />
+<form (submit)="onSearchSubmit()">
+    Search: <input type="text" name="searchString" (keyup)="onSearchSubmit()" [(ngModel)]="searchString" />
 </form>
+<br /><br />
+Users:
+<br /><br />
+<div *ngFor="let profile of profiles">
+	<div>Username: {{ profile.username }}</div>
+	<div>Name: {{ profile.name }}</div>
+	<div>
+		<button (click)="viewProfile(profile.username)">View Profile</button>
+		<button *ngIf="!isConnected(profile.username) && !isReceived(profile.username)" (click)="sendRequest(profile.username)">Request Connection</button>
+		<button *ngIf="isReceived(profile.username)" (click)="acceptRequest(profile.username)">Accept Request</button>
+	</div>
+	<br />
+</div>

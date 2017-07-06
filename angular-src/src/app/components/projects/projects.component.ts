@@ -41,6 +41,7 @@ export class ProjectsComponent implements OnInit {
     this.projectForm = this._fb.group({
       projectName: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.required, Validators.maxLength(300)]],
+      private: Boolean,
       tags: this._fb.array([
           this.initTag(),
       ]),
@@ -101,15 +102,15 @@ export class ProjectsComponent implements OnInit {
 
   onSearchSubmit() {
 
-  if(this.searchString == '') {
+    if(this.searchString == '') {
 
-    this.authService.getProjects().subscribe(projects => {
-        this.projects = projects;
-    }, err => {
-      console.log(err);
-    });
+      this.authService.getProjects().subscribe(projects => {
+          this.projects = projects;
+      }, err => {
+        console.log(err);
+      });
 
-  } else {
+    } else {
       this.authService.getProjectsAfterSearch(this.searchString).subscribe(projects => {
           this.projects = projects;
       }, err => {

@@ -143,6 +143,7 @@ module.exports = (io) => {
 					name: profile.name,
 					description: req.body.description,
 					projectName: req.body.projectName,
+					private: req.body.private,
 					languages: languages,
 					tags: tags
 				});
@@ -166,7 +167,7 @@ module.exports = (io) => {
 		});
 	});
 
-	router.post('/search', passport.authenticate('jwt', {session: false}), (req, res) => {
+	router.post('/searchprojects', passport.authenticate('jwt', {session: false}), (req, res) => {
 		var searchString = req.body.searchString;
 		
 		Project.getProjectsRegexSearch(searchString, function(err, projects) {
@@ -355,6 +356,20 @@ module.exports = (io) => {
 			}
 		});
 
+	});
+
+	router.post('/searchprofiles', passport.authenticate('jwt', {session: false}), (req, res) => {
+		var searchString = req.body.searchString;
+
+		Profile.getProfilesRegexSearch(searchString, function(err, profiles) {
+	        if(err) throw err;
+	        else res.json(profiles);
+	    });
+
+		// Profile.getProfileFullTextSearch(searchString, (err, profile) => {
+		// 	if(err) throw err;
+		// 	res.json(profile);
+		// });
 	});
 
 

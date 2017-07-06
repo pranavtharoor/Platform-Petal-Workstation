@@ -99,9 +99,10 @@ export class AuthService {
     this.loadToken();
     headers.append('Authorization', this.authToken);
     headers.append('Content-type', 'application/json');
-    return this.http.post('http://localhost:3000/users/search', {searchString: searchString}, {headers: headers})
+    return this.http.post('http://localhost:3000/users/searchprojects', {searchString: searchString}, {headers: headers})
     .map(res => res.json());
   }
+
 
   // Connections
 
@@ -147,6 +148,17 @@ export class AuthService {
     headers.append('Authorization', this.authToken);
     headers.append('Content-type', 'application/json');
     return this.http.post('http://localhost:3000/users/removeconnection', {user: user}, {headers: headers})
+    .map(res => res.json());
+  }
+
+// Profile
+
+  getProfilesAfterSearch(searchString) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/searchprofiles', {searchString: searchString}, {headers: headers})
     .map(res => res.json());
   }
 

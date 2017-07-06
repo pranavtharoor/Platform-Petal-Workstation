@@ -7,6 +7,7 @@ const projectSchema = mongoose.Schema({
 	name: {type:String},
 	projectName: {type: String},
 	description: {type:String},
+	private: {type: Boolean},
 	languages: {type: Array},
 	tags: {type: Array}
 });
@@ -16,7 +17,7 @@ projectSchema.index({name: 'text', projectName: 'text', description: 'text', tag
 const Project = module.exports = mongoose.model('Project', projectSchema);
 
 module.exports.getProjects = function(callback) {
-	Project.find(callback);
+	Project.find({private: false}, callback);
 };
 
 module.exports.addProject = function(newProject, callback) {
@@ -24,12 +25,12 @@ module.exports.addProject = function(newProject, callback) {
 };
 
 module.exports.getProjectsFullTextSearch = function(searchString, callback) {
-	Project.find({$text: {$search: searchString}}, callback);
+	Project.find({$and:[{private: false}, {$text: {$search: searchString}}]}, callback);
 };
 
 module.exports.getProjectsRegexSearch = function(searchString, callback) {
 	const regex = new RegExp(escapeRegex(searchString), 'gi');
-	Project.find({$or:[{description: regex}, {name: regex}, {projectName: regex}, {tags: regex}, {languages: regex}]}, callback);
+	Project.find({$and:[{private: false}, {$or:[{description: regex}, {name: regex}, {projectName: regex}, {tags: regex}, {languages: regex}]}]}, callback);
 };
 
 function escapeRegex(text) {

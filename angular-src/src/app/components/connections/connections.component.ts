@@ -3,6 +3,22 @@ import { AuthService } from '../../services/auth.service';
 import { SocketioService } from '../../services/socketio.service';
 import { Subscription } from 'rxjs/Subscription';
 
+interface Address {
+  street: String,
+  city:  String,
+  state: String,
+  country: String,
+  pinCode:  String
+}
+
+interface Profile {
+  username: String;
+  name: String;
+  dob: String,
+  gender:  String,
+  address: Address
+}
+
 @Component({
   selector: 'app-connections',
   templateUrl: './connections.component.html',
@@ -10,10 +26,13 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ConnectionsComponent implements OnInit {
 
+  profile: Profile;
+  profiles: Profile[];  
 	connections: Object;
-  receiver: String;
   message: String;
   subscription: Subscription;
+  searchString: String;
+  username: String;
 
   constructor(private authService: AuthService, private socketioService: SocketioService) {
 
@@ -41,9 +60,9 @@ export class ConnectionsComponent implements OnInit {
   	});
   }
 
-  sendRequest() {
-    this.authService.reqestConnection(this.receiver).subscribe(connections => {
-      this.socketioService.requestConnection(this.receiver);
+  sendRequest(receiver) {
+    this.authService.reqestConnection(receiver).subscribe(connections => {
+      this.socketioService.requestConnection(receiver);
       this.connections = connections;    
     }, err => {
       console.log(err);
@@ -74,6 +93,59 @@ export class ConnectionsComponent implements OnInit {
       this.connections = connections;    
     }, err => {
       console.log(err);
+    });
+  }
+
+  onSearchSubmit() {
+    this.authService.getProfile().subscribe(profile => {
+      this.username = profile.username;
+      this.authService.getProfilesAfterSearch(this.searchString).subscribe(profiles => {
+        var pos = profiles.findIndex((element) => {
+         return element.username == this.username;
+        });
+        if (pos >= 0)
+          profiles.splice(pos, 1);
+        this.profiles = profiles;
+      }, err => {
+        console.log(err);
+      });
+    }, err => {
+      console.log(err);
+    });
+
+  }
+
+  isConnected(username) {
+    var flag = false;
+    if(this.connections['connected']) {
+      for(var i = 0; i < this.connections['connected'].length; i++) {
+        if(this.connections['connected'][i].username == username)
+          flag = true;
+      }
+    }
+    if(this.connections['pending']['sent']) {
+      for(var i = 0; i < this.connections['pending']['sent'].length; i++) {
+        if(this.connections['pending']['sent'][i].username == username)
+          flag = true;
+      }
+    }
+    return flag;
+  }
+
+  isReceived(username) {
+    var flag = false;
+    if(this.connections['pending']['received']) {
+      for(var i = 0; i < this.connections['pending']['received'].length; i++) {
+        if(this.connections['pending']['received'][i].username == username)
+          flag = true;
+      }
+    }
+    return flag;
+  }
+
+  viewProfile(username) {
+    this.profile = this.profiles.find((element) => {
+         return element.username == username;
     });
   }
 
