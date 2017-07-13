@@ -46,6 +46,7 @@ module.exports = (io) => {
 				User.comparePassword(password, user.password, (err, isMatch) => {
 					if(err) throw err;
 					if(isMatch) {
+						delete user.password;
 						const token = jwt.sign(user, config.secret, {
 							expiresIn: 604800 
 						});
@@ -127,35 +128,41 @@ module.exports = (io) => {
 	});
 
 	router.post('/addproject', passport.authenticate('jwt', {session: false}), (req, res) => {
-		Profile.getProfileByUsername(req.user.username, (err, profile) => {
-			if(err) throw err;
-			var tags = [];
-			var languages = [];
-			if(profile) {
-				for(var i = 0; i < req.body.tags.length; i++) {
-					tags.push(req.body.tags[i].tag);
-				}
-				for(var i = 0; i < req.body.languages.length; i++) {
-					languages.push(req.body.languages[i].language);
-				}
-				let newProject = new Project({
-					username: req.user.username,
-					name: profile.name,
-					description: req.body.description,
-					projectName: req.body.projectName,
-					private: req.body.private,
-					languages: languages,
-					tags: tags
-				});
-				Project.addProject(newProject, (err, project) => {
-					if(err) {
-						res.json({success: false, msg: 'Failed to add project'});
+		Project.getProject(req.user.username, req.body.projectName, (err, project) => {
+			if(project) {
+				res.json({success: false, msg: 'You already have a project with this project name. Use a different project name'})
+			} else {
+				Profile.getProfileByUsername(req.user.username, (err, profile) => {
+					if(err) throw err;
+					var tags = [];
+					var languages = [];
+					if(profile) {
+						for(var i = 0; i < req.body.tags.length; i++) {
+							tags.push(req.body.tags[i].tag);
+						}
+						for(var i = 0; i < req.body.languages.length; i++) {
+							languages.push(req.body.languages[i].language);
+						}
+						let newProject = new Project({
+							username: req.user.username,
+							name: profile.name,
+							description: req.body.description,
+							projectName: req.body.projectName,
+							private: req.body.private,
+							languages: languages,
+							tags: tags
+						});
+						Project.addProject(newProject, (err, project) => {
+							if(err) {
+								res.json({success: false, msg: 'Failed to add project'});
+							} else {
+								res.json({success: true, msg: 'Project added'});
+							}
+						});
 					} else {
-						res.json({success: true, msg: 'Project added'});
+						res.json({success: false, msg: 'Add profile details before making projects'})
 					}
 				});
-			} else {
-				res.json({success: false ,msg: 'Add profile details before making projects'})
 			}
 		});
 	});
@@ -179,6 +186,21 @@ module.exports = (io) => {
 		// 	if(err) throw err;
 		// 	res.json(projects);
 		// });
+	});
+
+	router.get('/userprojects', passport.authenticate('jwt', {session: false}), (req, res) => {
+		Project.getProjects(req.user.username, (err, projects) => {
+			if(err) throw err;
+			res.json(projects);
+		});
+	});
+
+	router.post('/project', passport.authenticate('jwt', {session: false}), (req, res) => {
+		Project.getProject(req.body.creator, req.body.projectName, (err, project) => {
+			if(err) throw err;
+			if(project)
+			res.json(project);
+		});
 	});
 
 	router.get('/setlogin', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -372,6 +394,279 @@ module.exports = (io) => {
 		// });
 	});
 
+	router.post('/sendteaminvite', passport.authenticate('jwt', {session: false}), (req, res) => {
 
-	return router
+		if(req.user.username == req.body.receiver) res.json({success: false});
+		else {
+			Project.getProject(req.user.username, req.body.projectName, (err, project) => {
+
+				if(err) throw err;
+				if(project) {
+					var sent = project.pending;
+					var flag = false;
+					for(var i = 0; i < sent.length; i++) {
+						if(sent[i].username == req.body.receiver)
+							flag = true;
+					}
+					if(!flag) {
+						Project.updateProject(req.user.username, req.body.projectName, {$addToSet: {'pending': {username: req.body.receiver}}}, (err, project) => {
+							if (err) throw err;
+							if(project) {
+								User.updateUser(req.body.receiver, {$addToSet: {'pendingTeamInvites': {projectName: req.body.projectName, creator: req.user.username}}}, (err, user) => {
+									if (err) throw err;
+									if(user) {
+
+										Project.getProject(req.user.username, req.body.projectName, (err, project) => {
+											if(err) throw err;
+											if(user) {
+												return res.json(project);
+											} else {
+												res.json({success: false});
+											}
+										});
+
+									} else res.json({success: false});
+								});
+							} else res.json({success: false});
+						});
+					}
+				}
+			});
+		}
+
+	});
+
+	router.get('/getteams', passport.authenticate('jwt', {session: false}), (req, res) => {
+		User.getUserByUsername(req.user.username, (err, user) => {
+			if(err) throw err;
+			if(user) res.json({invites: user.pendingTeamInvites, teams: user.teams, sentTeamRequests: user.sentTeamRequests});
+		});
+	});
+
+	router.post('/acceptprojectinvite', passport.authenticate('jwt', {session: false}), (req, res) => {
+		
+		User.getUserByUsername(req.user.username, (err, user) => {
+
+			if(err) throw err;
+			if(user) {
+				var received = user.pendingTeamInvites;
+				var flag = false;
+				for(var i = 0; i < received.length; i++) {
+					if(received[i].creator == req.body.creator && received[i].projectName == req.body.projectName)
+						flag = true;
+				}
+				if(flag) {
+
+					User.updateUser(req.user.username, {$pull: {'pendingTeamInvites': {creator: req.body.creator, projectName: req.body.projectName}}},(err, user) => {
+						if(err) throw err;
+						if(user){
+							Project.updateProject(req.body.creator, req.body.projectName, {$pull: {'pending': {username: req.user.username}}},(err, project) => {
+								if(err) throw err;
+								if(project){
+									Project.updateProject(req.body.creator, req.body.projectName, {$addToSet: {'team': {username: req.user.username}}},(err, project) => {
+										if(err) throw err;
+										if(project){
+											User.updateUser(req.user.username, {$addToSet: {'teams': {creator: req.body.creator, projectName: req.body.projectName}}},(err, user) => {
+												if(err) throw err;
+												if(user){
+													res.json({invites: user.pendingTeamInvites, teams: user.teams});
+												}
+											});
+										} else res.json({success: false});
+									});
+								} else res.json({success: false});
+							});
+						} else res.json({success: false});
+					});
+				}
+			}
+		});
+	});
+
+	router.post('/declineprojectinvite', passport.authenticate('jwt', {session: false}), (req, res) => {
+		User.getUserByUsername(req.user.username, (err, user) => {
+
+			if(err) throw err;
+			if(user) {
+				var received = user.pendingTeamInvites;
+				var flag = false;
+				for(var i = 0; i < received.length; i++) {
+					if(received[i].creator == req.body.creator && received[i].projectName == req.body.projectName)
+						flag = true;
+				}
+				if(flag) {
+
+					Project.updateProject(req.body.creator, req.body.projectName, {$pull: {'pending': {username: req.user.username}}},(err, project) => {
+						if(err) throw err;
+						if(project){
+							User.updateUser(req.user.username, {$pull: {'pendingTeamInvites': {creator: req.body.creator, projectName: req.body.projectName}}},(err, user) => {
+								if(err) throw err;
+								if(user){
+									User.getUserByUsername(req.user.username, (err, user) => {
+										if(err) throw err;
+										if(user){
+											res.json({invites: user.pendingTeamInvites, teams: user.teams});
+										}
+									});
+								} else res.json({success: false});
+							});
+						} else res.json({success: false});
+					});
+				}
+			}
+		});
+	});
+
+	router.post('/removemember', passport.authenticate('jwt', {session: false}), (req, res) => {
+		Project.updateProject(req.user.username, req.body.projectName, {$pull: {'team': {username: req.body.member}}},(err, project) => {
+			if(err) throw err;
+			if(project){
+				User.updateUser(req.body.member, {$pull: {'teams': {creator: req.user.username, projectName: req.body.projectName}}},(err, user) => {
+					if(err) throw err;
+					if(user){
+						Project.getProject(req.user.username, req.body.projectName,(err, project) => {
+							if(err) throw err;
+							if(project){
+								res.json(project);
+							}
+						});
+					} else res.json({success: false});
+				});
+			} else res.json({success: false});
+		});
+	});
+
+	router.post('/leaveproject', passport.authenticate('jwt', {session: false}), (req, res) => {
+		Project.updateProject(req.body.creator, req.body.projectName, {$pull: {'team': {username: req.user.username}}},(err, project) => {
+			if(err) throw err;
+			if(project){
+				User.updateUser(req.user.username, {$pull: {'teams': {creator: req.body.creator, projectName: req.body.projectName}}},(err, user) => {
+					if(err) throw err;
+					if(user){
+						res.json({success: true});
+					} else res.json({success: false});
+				});
+			} else res.json({success: false});
+		});
+	});
+
+	router.post('/getmemberteams', passport.authenticate('jwt', {session: false}), (req, res) => {
+		User.getUserByUsername(req.body.username, (err, user) => {
+			if(err) throw err;
+			if(user) {
+				res.json(user.teams);
+			}
+		});
+	});
+
+	router.post('/requestjoinproject', passport.authenticate('jwt', {session: false}), (req, res) => {
+		if(req.user.username == req.body.creator) res.json({success: false});
+		else {
+			Project.getProject(req.body.creator, req.body.projectName, (err, project) => {
+
+				if(err) throw err;
+				if(project) {
+					var received = project.requests;
+					var flag = false;
+					for(var i = 0; i < received.length; i++) {
+						if(received[i].username == req.user.username)
+							flag = true;
+					}
+					if(!flag) {
+						Project.updateProject(req.body.creator, req.body.projectName, {$addToSet: {'requests': {username: req.user.username}}}, (err, project) => {
+							if (err) throw err;
+							if(project) {
+								User.updateUser(req.user.username, {$addToSet: {'sentTeamRequests': {projectName: req.body.projectName, creator: req.body.creator}}}, (err, user) => {
+									if (err) throw err;
+									if(user) {
+										res.json({success: true});
+									} else res.json({success: false});
+								});
+							} else res.json({success: false});
+						});
+					}
+				}
+			});
+		}
+
+	});
+
+	router.post('/acceptrequesttojointeam', passport.authenticate('jwt', {session: false}), (req, res) => {
+		
+		User.getUserByUsername(req.body.sender, (err, user) => {
+
+			if(err) throw err;
+			if(user) {
+				var sent = user.sentTeamRequests;
+				var flag = false;
+				for(var i = 0; i < sent.length; i++) {
+					if(sent[i].creator == req.user.username && sent[i].projectName == req.body.projectName)
+						flag = true;
+				}
+				if(flag) {
+
+					User.updateUser(req.user.username, {$pull: {'sentTeamRequests': {creator: req.user.username, projectName: req.body.projectName}}},(err, user) => {
+						if(err) throw err;
+						if(user){
+							Project.updateProject(req.user.username, req.body.projectName, {$pull: {'requests': {username: req.body.sender}}},(err, project) => {
+								if(err) throw err;
+								if(project){
+									Project.updateProject(req.user.username, req.body.projectName, {$addToSet: {'team': {username: req.body.sender}}},(err, project) => {
+										if(err) throw err;
+										if(project){
+											User.updateUser(req.body.sender, {$addToSet: {'teams': {creator: req.user.username, projectName: req.body.projectName}}},(err, user) => {
+												if(err) throw err;
+												if(user){
+													Project.getProject(req.user.username, req.body.projectName,(err, project) => {
+														if(project) {
+															res.json(project);
+														} else res.json({success: false});
+													});
+												}
+											});
+										} else res.json({success: false});
+									});
+								} else res.json({success: false});
+							});
+						} else res.json({success: false});
+					});
+				}
+			}
+		});
+	});
+
+	router.post('/declinerequesttojointeam', passport.authenticate('jwt', {session: false}), (req, res) => {
+		User.getUserByUsername(req.body.sender, (err, user) => {
+
+			if(err) throw err;
+			if(user) {
+				var sent = user.sentTeamRequests;
+				var flag = false;
+				for(var i = 0; i < sent.length; i++) {
+					if(sent[i].creator == req.user.username && sent[i].projectName == req.body.projectName)
+						flag = true;
+				}
+				if(flag) {
+
+					Project.updateProject(req.user.username, req.body.projectName, {$pull: {'requests': {username: req.body.sender}}},(err, project) => {
+						if(err) throw err;
+						if(project){
+							User.updateUser(req.body.sender, {$pull: {'sentTeamRequests': {creator: req.user.username, projectName: req.body.projectName}}},(err, user) => {
+								if(err) throw err;
+								if(user){
+									Project.getProject(req.user.username, req.body.projectName,(err, project) => {
+										if(project) {
+											res.json(project);
+										} else res.json({success: false});
+									});
+								} else res.json({success: false});
+							});
+						} else res.json({success: false});
+					});
+				}
+			}
+		});
+	});
+
+	return router;
 };

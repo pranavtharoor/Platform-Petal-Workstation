@@ -94,6 +94,15 @@ export class AuthService {
     .map(res => res.json());
   }
 
+  getUserProjects() {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.get('http://localhost:3000/users/userprojects', {headers: headers})
+    .map(res => res.json());
+  }
+
   getProjectsAfterSearch(searchString) {
     let headers = new Headers();
     this.loadToken();
@@ -103,6 +112,105 @@ export class AuthService {
     .map(res => res.json());
   }
 
+  getMemberTeams(username) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/getmemberteams', {username: username}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  sendTeamInvite(receiver, projectName) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/sendteaminvite', {receiver: receiver, projectName: projectName}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  getTeams() {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.get('http://localhost:3000/users/getteams', {headers: headers})
+    .map(res => res.json());
+  }
+
+  getProject(projectName, creator) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/project', {creator: creator, projectName: projectName}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  acceptProjectInvite(projectName, creator) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/acceptprojectinvite', {creator: creator, projectName: projectName}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  declineProjectInvite(projectName, creator) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/declineprojectinvite', {creator: creator, projectName: projectName}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  removeMemberFromProject(projectName, member) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/removemember', {projectName: projectName, member: member}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  leaveProject(projectName, creator) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/leaveproject', {projectName: projectName, creator: creator}, {headers: headers})
+    .map(res => res.json());
+  }
+
+
+  requestJoinProject(projectName, creator) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/requestjoinproject', {projectName: projectName, creator: creator}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  acceptRequestToJoinTeam(sender, projectName) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/acceptrequesttojointeam', {projectName: projectName, sender: sender}, {headers: headers})
+    .map(res => res.json());
+  }
+
+  declineRequestToJoinTeam(sender, projectName) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/declinerequesttojointeam', {projectName: projectName, sender: sender}, {headers: headers})
+    .map(res => res.json());
+  }
 
   // Connections
 

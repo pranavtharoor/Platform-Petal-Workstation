@@ -56,12 +56,13 @@ Add project:<br />
     </div>
     <button type="submit" [disabled]="!projectForm.valid">Submit</button>
 </form>
-
+<br /><br />
 <br /><br />
 <form (submit)="onSearchSubmit()">
     Search: <input type="text" name="searchString" (keyup)="onSearchSubmit()" [(ngModel)]="searchString" />
     <!-- <input type="submit" /> -->
 </form>
+
 <br /><br />
 Projects:
 <br /><br />
@@ -75,5 +76,6 @@ Projects:
 	<div>Tags:
         <span *ngFor="let tag of project.tags">{{ tag }} </span>
     </div>
+    <button (click)="requestJoinProject(project.projectName, project.name)">Join</button>
 	<br />
 </div>

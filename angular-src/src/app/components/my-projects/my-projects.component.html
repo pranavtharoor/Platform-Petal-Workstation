@@ -1,0 +1,63 @@
+ <div *ngIf="project">
+    <div>Project Name: {{ project.projectName }}</div>
+    <div>Description: {{ project.description }}</div>
+    <div>Project by: {{ project.name }}</div>
+    <div>Private: {{ project.private }}</div>
+    <div>Pending invites:
+        <span *ngFor="let member of project.pending">{{ member.username }} </span>
+    </div>
+    <div>Team:
+        <span *ngFor="let member of project.team">{{ member.username }} 
+        <button *ngIf="userIsCreator" (click)="removeMemberFromProject(project.projectName, member.username)">Remove</button>
+        </span>
+    </div>
+    <div>Languages: 
+        <span *ngFor="let language of project.languages">{{ language }} </span>
+    </div>
+    <div>Tags:
+        <span *ngFor="let tag of project.tags">{{ tag }} </span>
+    </div>
+    <div *ngIf="userIsCreator">
+        Requests:
+        <span *ngFor="let request of project.requests">{{ request.username }} 
+            <button (click)="acceptRequestToJoinTeam(request.username, project.projectName)">Accept</button>
+            <button (click)="declineRequestToJoinTeam(request.username, project.projectName)">Decline</button>
+        </span>
+        <br />
+        Add team member:<input type="text" name="searchStringUser" (keyup)="onUserSearch()" [(ngModel)]="searchStringUser" />
+        <div *ngFor="let profile of profiles">
+            <div>Username: {{ profile.username }}</div>
+            <div>Name: {{ profile.name }}</div>
+            <button *ngIf="!isInTeam(profile.username)" (click)="sendTeamInvite(profile.username, project.projectName)">Invite</button>
+        </div>
+    </div>
+    <button *ngIf="!userIsCreator" (click)="leaveProject(project.projectName, project.name)">Leave</button>
+</div>
+<br />
+Invitations:
+<div *ngFor="let invite of invites">
+    <div>Project Name: {{ invite.projectName }}</div>
+    <div>Description: {{ invite.creator }}</div>
+    <button (click)="acceptProjectInvite(invite.projectName, invite.creator)">Accept</button>
+    <button (click)="declineProjectInvite(invite.projectName, invite.creator)">Decline</button>
+    <br />
+</div>
+<br />
+My Projects:
+<br /><br />
+<div *ngFor="let project of userProjects">
+    <div>Project Name: {{ project.projectName }}</div>
+    <div>Description: {{ project.description }}</div>
+    <button (click)="viewProject(project.projectName, project.name)">View</button>
+    <br />
+</div>
+<br />
+Projects I contribute to:
+<br />
+<br />
+<div *ngFor="let team of teams">
+    <div>Project Name: {{ team.projectName }}</div>
+    <div>Creator: {{ team.creator }}</div>
+    <button (click)="getProject(team.projectName, team.creator)">View</button>
+    <br />
+</div>

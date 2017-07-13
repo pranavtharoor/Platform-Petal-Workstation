@@ -4,6 +4,22 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 
+interface Address {
+  street: String,
+  city:  String,
+  state: String,
+  country: String,
+  pinCode:  String
+}
+
+interface Profile {
+  username: String;
+  name: String;
+  dob: String,
+  gender:  String,
+  address: Address
+}
+
 
   interface Project {
     projectName: String;
@@ -20,9 +36,16 @@ import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 export class ProjectsComponent implements OnInit {
 
+  userProjects: Object;
   projects: Object;  
   projectForm: FormGroup;
   searchString: String;
+  searchStringUser: String;
+  username: String;
+  profiles: Profile;
+  teams: Object[];
+  invites: Object[];
+  sentTeamRequests: Object[];
 
   constructor(
   	private authService: AuthService,
@@ -32,11 +55,19 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit() {
 
+    this.authService.getTeams().subscribe(data => {
+      this.teams = data.teams;
+      this.invites = data.invites;
+      this.sentTeamRequests = data.sentTeamRequests;
+    }, err => {
+      console.log(err);
+    });
+
     this.authService.getProjects().subscribe(projects => {
         this.projects = projects;
     }, err => {
       console.log(err);
-    })
+    });
 
     this.projectForm = this._fb.group({
       projectName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -91,9 +122,14 @@ export class ProjectsComponent implements OnInit {
         this.flashMessage.show(data.msg, {cssClass: 'color-success', timeout: 3000});
         this.authService.getProjects().subscribe(projects => {
         this.projects = projects;
-      }, err => {
-        console.log(err);
-      });
+        }, err => {
+          console.log(err);
+        });
+        this.authService.getUserProjects().subscribe(projects => {
+            this.userProjects = projects;
+        }, err => {
+          console.log(err);
+        });
       } else {
         this.flashMessage.show(data.msg, {cssClass: 'color-danger', timeout: 3000});
       }
@@ -117,6 +153,18 @@ export class ProjectsComponent implements OnInit {
         console.log(err);
       });
     }
+  }
+
+  requestJoinProject(projectName, creator) {
+    this.authService.requestJoinProject(projectName, creator).subscribe(data => {
+        this.authService.getTeams().subscribe(data => {
+          this.sentTeamRequests = data.sentTeamRequests;
+      }, err => {
+        console.log(err);
+      });
+    }, err => {
+      console.log(err);
+    })
   }
 
 }

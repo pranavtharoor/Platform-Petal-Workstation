@@ -20,6 +20,7 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { ConnectionsComponent } from './components/connections/connections.component';
+import { MyProjectsComponent } from './components/my-projects/my-projects.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { ConnectionsComponent } from './components/connections/connections.compo
     DashboardComponent,
     EditProfileComponent,
     ProjectsComponent,
-    ConnectionsComponent
+    ConnectionsComponent,
+    MyProjectsComponent
   ],
   imports: [
     BrowserModule,

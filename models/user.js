@@ -29,7 +29,10 @@ const UserSchema = mongoose.Schema({
 			received: {type: Array}
 		},
 		connected: {type: Array},
-	}
+	},
+	teams: {type: Array},
+	pendingTeamInvites: {type: Array},
+	sentTeamRequests: {type: Array}
 });
 
 const User = module.exports = mongoose.model('User', UserSchema);
