@@ -41,7 +41,49 @@ export class SocketioService {
 			this.sendConnections(data);
 		});
 
+		this.socket.on('sendTeamInvite', data => {
+			this.flashMessage.show(data + ' invited you to a team', {cssClass: 'color-success', timeout: 5000});
+			this.sendMyProjects(data);
+		});		
+
+		this.socket.on('requestJoinTeam', data => {
+			this.flashMessage.show(data + ' wants to join your team', {cssClass: 'color-success', timeout: 5000});
+			this.sendMyProjects(data);
+		});		
+
+		this.socket.on('acceptTeamInvite', data => {
+			this.flashMessage.show(data + ' accepted you to the team', {cssClass: 'color-success', timeout: 5000});
+			this.sendMyProjects(data);
+		});		
+
+		this.socket.on('acceptJoinTeam', data => {
+			this.flashMessage.show(data + ' joined the team', {cssClass: 'color-success', timeout: 5000});
+			this.sendMyProjects(data);
+		});		
+
+		this.socket.on('declineTeamInvite', data => {
+			this.flashMessage.show(data + ' declined your team invite', {cssClass: 'color-danger', timeout: 5000});
+			this.sendMyProjects(data);
+		});		
+
+		this.socket.on('declineJoinTeam', data => {
+			this.flashMessage.show(data + ' declined your request to join the team', {cssClass: 'color-danger', timeout: 5000});
+			this.sendMyProjects(data);
+		});		
+
+		this.socket.on('removeTeamMember', data => {
+			this.flashMessage.show(data + ' removed you form the team', {cssClass: 'color-danger', timeout: 5000});
+			this.sendMyProjects(data);
+		});		
+
+		this.socket.on('leaveTeam', data => {
+			this.flashMessage.show(data + ' left the team', {cssClass: 'color-danger', timeout: 5000});
+			this.sendMyProjects(data);
+		});		
+
 	}
+
+// Connections
 
 	requestConnection(receiver) {
 		this.socket.emit('requestConnection', receiver);
@@ -59,14 +101,59 @@ export class SocketioService {
 		this.socket.emit('removeConnection', connection);
 	}
 
+    getConnections(): Observable<any> {
+        return this.subject.asObservable();
+    }
+
     private sendConnections(message) {
         this.subject.next(message);
         this.subject.next();
     }
 
-    getConnections(): Observable<any> {
+// Team
+
+	sendTeamInvite(receiver) {
+		this.socket.emit('sendTeamInvite', receiver);
+	}
+
+	requestJoinTeam(receiver) {
+		this.socket.emit('requestJoinTeam', receiver);
+	}
+
+	acceptTeamInvite(sender) {
+		this.socket.emit('acceptTeamInvite', sender);
+	}
+
+	acceptJoinTeam(sender) {
+		this.socket.emit('acceptJoinTeam', sender);
+	}
+
+	declineTeamInvite(sender) {
+		this.socket.emit('declineTeamInvite', sender);
+	}
+
+	declineJoinTeam(sender) {
+		this.socket.emit('declineJoinTeam', sender);
+	}
+
+	removeTeamMember(member) {
+		this.socket.emit('removeTeamMember', member);
+	}
+
+	leaveTeam(member) {
+		this.socket.emit('leaveTeam', member);
+	}
+
+    getMyProjects(): Observable<any> {
         return this.subject.asObservable();
     }
+
+    private sendMyProjects(message) {
+        this.subject.next(message);
+        this.subject.next();
+    }
+
+// Login logout
 
     login(token) {
 			this.socket.emit('login', token.slice(4));
