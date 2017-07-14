@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
+import { SocketioService } from '../../services/socketio.service';
+import { Subscription } from 'rxjs/Subscription';
 
 interface Address {
   street: String,
@@ -34,12 +36,34 @@ export class MyProjectsComponent implements OnInit {
   invites: Object;
   teams: Object[];
   userIsCreator: Boolean;
+  subscription: Subscription;
+  message: String;
 
   constructor(
   	private authService: AuthService,
     private flashMessage: FlashMessagesService,
-    private _fb: FormBuilder
-  	) { }
+    private _fb: FormBuilder,
+    private socketioService: SocketioService
+  	) { 
+
+      this.subscription = this.socketioService.getConnections().subscribe(message => {
+        this.message = message;
+        // console.log(this.message);
+        this.authService.getUserProjects().subscribe(projects => {
+            this.userProjects = projects;
+        }, err => {
+          console.log(err);
+        });
+        this.authService.getTeams().subscribe(data => {
+          this.invites = data.invites;
+          this.teams = data.teams;
+        }, err => {
+          console.log(err);
+        });
+
+      });
+
+  }
 
   ngOnInit() {
     this.authService.getUserProjects().subscribe(projects => {
@@ -85,6 +109,7 @@ export class MyProjectsComponent implements OnInit {
   sendTeamInvite(receiver, projectName) {
   	this.authService.sendTeamInvite(receiver, projectName).subscribe(project => {
   		this.project = project;
+      this.socketioService.sendTeamInvite(receiver);
 	  });
   }
 
@@ -92,6 +117,7 @@ export class MyProjectsComponent implements OnInit {
   	this.authService.acceptProjectInvite(projectName, creator).subscribe(data => {
   		this.invites = data.invites;
       this.teams = data.teams;
+      this.socketioService.acceptTeamInvite(creator);
       this.authService.getTeams().subscribe(data => {
         this.invites = data.invites;
         this.teams = data.teams;
@@ -105,6 +131,7 @@ export class MyProjectsComponent implements OnInit {
   	this.authService.declineProjectInvite(projectName, creator).subscribe(data => {
   		this.invites = data.invites;
       this.teams = data.teams;
+      this.socketioService.declineTeamInvite(creator);
       this.authService.getTeams().subscribe(data => {
         this.invites = data.invites;
         this.teams = data.teams;
@@ -124,6 +151,7 @@ export class MyProjectsComponent implements OnInit {
   removeMemberFromProject(projectName, member) {
     this.authService.removeMemberFromProject(projectName, member).subscribe(project => {
       this.project = project;
+      this.socketioService.removeTeamMember(member);
     });
   }
 
@@ -131,6 +159,7 @@ export class MyProjectsComponent implements OnInit {
     this.authService.leaveProject(projectName, creator).subscribe(data => {
       if (data.success) {
         delete this.project;
+        this.socketioService.leaveTeam(creator);
       }
     });
     this.authService.getTeams().subscribe(data => {
@@ -153,6 +182,7 @@ export class MyProjectsComponent implements OnInit {
   acceptRequestToJoinTeam(sender, projectName) {
     this.authService.acceptRequestToJoinTeam(sender, projectName).subscribe(project => {
       this.project = project;
+      this.socketioService.acceptJoinTeam(sender);
     }, err => {
       console.log(err);
     });
@@ -161,6 +191,7 @@ export class MyProjectsComponent implements OnInit {
   declineRequestToJoinTeam(sender, projectName) {
     this.authService.declineRequestToJoinTeam(sender, projectName).subscribe(project => {
       this.project = project;
+      this.socketioService.declineJoinTeam(sender);
     }, err => {
       console.log(err);
     });

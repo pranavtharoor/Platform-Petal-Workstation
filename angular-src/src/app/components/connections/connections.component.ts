@@ -38,7 +38,7 @@ export class ConnectionsComponent implements OnInit {
 
     this.subscription = this.socketioService.getConnections().subscribe(message => {
       this.message = message;
-      console.log(this.message);
+      // console.log(this.message);
       this.getConnections();
     });
 

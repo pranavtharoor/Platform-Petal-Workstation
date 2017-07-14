@@ -50,6 +50,8 @@ module.exports = function (sio) {
       return data.socketid;
     };
 
+// Connection
+
       socket.on('requestConnection', (receiver) => {
         if (checkUserLoggedin(receiver)) {
           sio.sockets.connected[getSocketId(receiver)].emit('connectionRequested', getUsername(socket.id));
@@ -73,6 +75,57 @@ module.exports = function (sio) {
           sio.sockets.connected[getSocketId(connection)].emit('connectionRemoved', getUsername(socket.id));
         }
       });
+
+// Team
+
+      socket.on('sendTeamInvite', (receiver) => {
+        if (checkUserLoggedin(receiver)) {
+          sio.sockets.connected[getSocketId(receiver)].emit('sendTeamInvite', getUsername(socket.id));
+        }
+      });
+
+      socket.on('requestJoinTeam', (receiver) => {
+        if (checkUserLoggedin(receiver)) {
+          sio.sockets.connected[getSocketId(receiver)].emit('requestJoinTeam', getUsername(socket.id));
+        }
+      });
+
+      socket.on('acceptTeamInvite', (sender) => {
+        if (checkUserLoggedin(sender)) {
+          sio.sockets.connected[getSocketId(sender)].emit('acceptTeamInvite', getUsername(socket.id));
+        }
+      });
+
+      socket.on('acceptJoinTeam', (sender) => {
+        if (checkUserLoggedin(sender)) {
+          sio.sockets.connected[getSocketId(sender)].emit('acceptJoinTeam', getUsername(socket.id));
+        }
+      });
+
+      socket.on('declineTeamInvite', (sender) => {
+        if (checkUserLoggedin(sender)) {
+          sio.sockets.connected[getSocketId(sender)].emit('declineTeamInvite', getUsername(socket.id));
+        }
+      });
+
+      socket.on('declineJoinTeam', (sender) => {
+        if (checkUserLoggedin(sender)) {
+          sio.sockets.connected[getSocketId(sender)].emit('declineJoinTeam', getUsername(socket.id));
+        }
+      });
+
+      socket.on('removeTeamMember', (member) => {
+        if (checkUserLoggedin(member)) {
+          sio.sockets.connected[getSocketId(member)].emit('removeTeamMember', getUsername(socket.id));
+        }
+      });
+
+      socket.on('leaveTeam', (member) => {
+        if (checkUserLoggedin(member)) {
+          sio.sockets.connected[getSocketId(member)].emit('leaveTeam', getUsername(socket.id));
+        }
+      });
+
 
     socket.on('disconnect', () => {
       var pos = global.loggedinSockets.findIndex((element) => {
