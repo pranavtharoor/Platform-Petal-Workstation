@@ -9,7 +9,7 @@
         <div>{{ project.name }}</div>
         <div *ngIf="project?.pending?.length > 0" class="ui sub header">Pending invites</div>
         <div>
-            <span *ngFor="let member of project.pending">{{ member.username }} </span>
+            <span class="ui label" *ngFor="let member of project.pending">{{ member.username }} </span>
         </div>
         <div *ngIf="project?.team?.length > 0" class="ui sub header">Team</div>
         <div>
@@ -19,11 +19,11 @@
         </div>
         <div *ngIf="project?.languages?.length > 0" class="ui sub header">Languages</div> 
         <div>
-            <span *ngFor="let language of project.languages">{{ language }} </span>
+            <span class="ui label" *ngFor="let language of project.languages">{{ language }} </span>
         </div>
         <div *ngIf="project?.tags?.length > 0" class="ui sub header">Tags</div>
         <div>
-            <span *ngFor="let tag of project.tags">{{ tag }} </span>
+            <span class="ui tag label" *ngFor="let tag of project.tags">{{ tag }} </span>
         </div>
         <br />
         <button class="ui mini negative button" *ngIf="canLeave" (click)="leaveProject(project.projectName, project.username)">Leave</button>

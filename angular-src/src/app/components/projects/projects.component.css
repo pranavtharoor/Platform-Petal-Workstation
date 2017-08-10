@@ -3,3 +3,17 @@
 	right: 30px;
 	top: 60px;
 }
+
+.labels {
+	margin: 10px 0 15px;
+}
+
+.label {
+	margin: 5px 7px 5px 0px;
+}
+
+.project-by {
+	text-align: right;
+	float: right;
+	font-size: 13px;
+}

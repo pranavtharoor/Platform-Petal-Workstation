@@ -80,26 +80,32 @@
     </div>
     <br />
 
-<div class="ui card fluid" *ngFor="let project of projects">
-  <div class="content">
-    <div class="header">{{ project.projectName }}</div>
-  </div>
-  <div class="content">
-    <h4 class="ui sub header">Description</h4>
-    <div class="ui small feed">
-        {{ project.description }}
+    <div class="ui card fluid" *ngFor="let project of projects">
+      <div class="content">
+        <div class="header">
+            {{ project.projectName }}
+            <span class="project-by">Project by {{ project.name }}</span> 
+        </div>
+      </div>
+      <div class="content">
+        <div class="ui sub header">
+        Description
+        </div>
+        <div class="ui small feed">
+            {{ project.description }}
+        </div>
+        <div class="ui sub header">Languages</div>
+        <div class="labels">
+            <span class="ui label" *ngFor="let language of project.languages">{{ language }}</span>
+        </div>
+        <div class="ui sub header">Tags</div>
+        <div class="labels"><span class="ui tag label" *ngFor="let tag of project.tags">{{ tag }} </span>
+        </div>
+      </div>
+      <div class="extra right aligned content">
+        <button (click)="requestJoinProject(project.projectName, project.name)" class="ui button">Join Project</button>
+      </div>
     </div>
-        <div>Project by: {{ project.name }}</div>
-        <div>Languages: 
-            <span *ngFor="let language of project.languages">{{ language }} </span>
-        </div>
-        <div>Tags:
-            <span *ngFor="let tag of project.tags">{{ tag }} </span>
-        </div>
-  </div>
-  <div class="extra content">
-    <button (click)="requestJoinProject(project.projectName, project.name)" class="ui button">Join Project</button>
-  </div>
-</div>
-<br /><br /><br />
+
+    <br /><br /><br />
 </div>
