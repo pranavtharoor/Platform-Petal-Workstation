@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
             }, err => {
               console.log(err);
             });
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['workstation']);
         }
   		} else {
   			this.flashMessage.show(data.msg, {cssClass: 'color-danger', timeout: 3000});

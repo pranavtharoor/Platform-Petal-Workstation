@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { WorkstationComponent } from './components/workstation/workstation.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { ProjectsComponent } from './components/projects/projects.component';
 import { ConnectionsComponent } from './components/connections/connections.component';
@@ -22,8 +22,8 @@ const appRoutes: Routes = [
 		component: LoginComponent
 	},
 	{
-		path: 'dashboard',
-		component: DashboardComponent,
+		path: 'workstation',
+		component: WorkstationComponent,
 		canActivate: [AuthGuard]
 	},
 	{

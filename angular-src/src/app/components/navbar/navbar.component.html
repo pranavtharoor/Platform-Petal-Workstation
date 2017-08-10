@@ -2,7 +2,7 @@
 	<div class="icon"></div>
 	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/login']" *ngIf="!authService.loggedIn()">Login</a>
 	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/register']" *ngIf="!authService.loggedIn()">Register</a>
-	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/dashboard']" *ngIf="authService.loggedIn()">Dashboard</a>
+	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/workstation']" *ngIf="authService.loggedIn()">Workstation</a>
 	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/profile']" *ngIf="authService.loggedIn()">Profile</a>
 	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/projects']" *ngIf="authService.loggedIn()">Projects</a>
 	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/myprojects']" *ngIf="authService.loggedIn()">My Projects</a>

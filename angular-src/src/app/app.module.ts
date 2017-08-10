@@ -9,7 +9,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProjectsComponent } from './components/projects/projects.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { ConnectionsComponent } from './components/connections/connections.component';
@@ -21,6 +20,7 @@ import { AuthService } from './services/auth.service';
 import { SocketioService } from './services/socketio.service';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AuthGuard } from './guards/auth.guard';
+import { WorkstationComponent } from './components/workstation/workstation.component';
 
 @NgModule({
   declarations: [
@@ -29,12 +29,12 @@ import { AuthGuard } from './guards/auth.guard';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    DashboardComponent,
     EditProfileComponent,
     ProjectsComponent,
     ConnectionsComponent,
     MyProjectsComponent,
-    JwtComponent
+    JwtComponent,
+    WorkstationComponent
   ],
   imports: [
     BrowserModule,
