@@ -56,11 +56,12 @@ module.exports = function(passport) {
 
                     else{
                         var newUser = new User();
-
+                        newUser.username = 'g_' + profile.id;
                         newUser.google.id = profile.id;
                         newUser.google.token = token;
                         newUser.google.name = profile.displayName;
                         newUser.google.email = profile.emails[0].value;
+                        newUser.lastlogin = 'never';
 
                         newUser.save(function(err){
                             if(err)
@@ -89,12 +90,12 @@ module.exports = function(passport) {
                         return done(null, user);
                     else {
                         var newUser = new User();
-
+                        newUser.username = 'fb_' + profile.id;
                         newUser.facebook.id = profile.id;
                         newUser.facebook.token = token;
                         newUser.facebook.email = profile.emails[0].value;
                         newUser.facebook.name = profile.displayName;
-
+                        newUser.lastlogin = 'never';
                         newUser.save(function(err) {
                             if (err)
                                 throw err;

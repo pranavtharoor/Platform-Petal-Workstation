@@ -1,7 +1,33 @@
-<form (submit)="onLoginSubmit()">
-	Username: <input type="text" name="username" [(ngModel)]="username" /><br />
-	Password: <input type="password" name="password" [(ngModel)]="password" /><br />
-	<input type="submit" />
-</form>
-<a href="/auth/facebook">FB</a><br />
-<a href="/auth/google">G+</a>
+<div class="ui text container">
+	<br />
+	<div class="ui center aligned large header"> Login to Platform Petal</div>
+	<form (submit)="onLoginSubmit()" class="ui form ">
+		<div class="field">
+			<label>Username</label>
+          	<div class="ui left icon input">
+            	<i class="user icon"></i>
+				<input placeholder="Username" type="text" name="username" [(ngModel)]="username" />
+			</div>
+		</div>
+		<br />
+		<div class="field">
+			<label>Password</label>
+          	<div class="ui left icon input">
+            	<i class="lock icon"></i>
+				<input placeholder="Password" type="password" name="password" [(ngModel)]="password" />
+			</div>
+		</div>
+		<br />
+		<input class="ui large button" type="submit" value="Login" />
+		</form>
+	<br /><br />
+	<div class="ui stackable two column grid">
+		<div class="ui row header">Login with</div>
+		<div class="four column wide">
+			<a class="ui button blue fluid" href="/auth/facebook">Facebook</a>
+		</div>
+		<div class="four column wide">
+			<a class="ui button red fluid" href="/auth/google">G+</a>
+		</div>
+	</div>
+</div>

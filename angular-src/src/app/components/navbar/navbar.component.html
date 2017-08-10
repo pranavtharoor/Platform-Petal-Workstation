@@ -1,12 +1,13 @@
-<nav>
+<nav class="ui secondary pointing menu">
 	<div class="icon"></div>
-	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/']">Home</a>
-	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/login']" *ngIf="!authService.loggedIn()">Login</a>
-	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/register']" *ngIf="!authService.loggedIn()">Register</a>
-	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/dashboard']" *ngIf="authService.loggedIn()">Dashboard</a>
-	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/profile']" *ngIf="authService.loggedIn()">Profile</a>
-	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/projects']" *ngIf="authService.loggedIn()">Projects</a>
-	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/myprojects']" *ngIf="authService.loggedIn()">My Projects</a>
-	<a [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/connections']" *ngIf="authService.loggedIn()">Connections</a>
-	<a (click)="onLogoutClick()" href="#" *ngIf="authService.loggedIn()">Logout</a>
+	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/login']" *ngIf="!authService.loggedIn()">Login</a>
+	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/register']" *ngIf="!authService.loggedIn()">Register</a>
+	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/dashboard']" *ngIf="authService.loggedIn()">Dashboard</a>
+	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/profile']" *ngIf="authService.loggedIn()">Profile</a>
+	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/projects']" *ngIf="authService.loggedIn()">Projects</a>
+	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/myprojects']" *ngIf="authService.loggedIn()">My Projects</a>
+	<a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions] = "{exact: true}" [routerLink]="['/connections']" *ngIf="authService.loggedIn()">Connections</a>
+	<div class="right menu">
+		<a class="item" (click)="onLogoutClick()" href="#" *ngIf="authService.loggedIn()">Logout</a>
+	</div>
 </nav>

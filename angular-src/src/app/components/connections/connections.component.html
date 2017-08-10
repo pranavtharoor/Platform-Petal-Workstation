@@ -1,38 +1,81 @@
-<div *ngIf="profile">
-	Profile: 
-<div>{{ profile?.username }}</div>
-<div>{{ profile?.name }}</div>
-<div>{{ profile?.dob }}</div>
-<div>{{ profile?.gender }}</div>
-<div>{{ profile?.address?.street }}</div>
-<div>{{ profile?.address?.city  }}</div>
-<div>{{ profile?.address?.state }}</div>
-<div>{{ profile?.address?.country }}</div>
-<div>{{ profile?.address?.pinCode  }}</div>
-</div>
+<br /><div class="ui large center aligned header">Connections</div>
 
-Connected:
-<div *ngFor="let connected of connections?.connected">{{connected.username}}<button (click)="removeConnection(connected.username)">Remove Connection</button></div>
-<br />
-Requests:
-<div *ngFor="let received of connections?.pending?.received">{{received.username}}<button (click)="acceptRequest(received.username)">Accept</button><button (click)="declineRequest(received.username)">Decline</button></div>
-<br />
-Sent requests:
-<div *ngFor="let sent of connections?.pending?.sent">{{sent.username}}</div>
-<br /><br />
-<form (submit)="onSearchSubmit()">
-    Search: <input type="text" name="searchString" (keyup)="onSearchSubmit()" [(ngModel)]="searchString" />
-</form>
-<br /><br />
-Users:
-<br /><br />
-<div *ngFor="let profile of profiles">
-	<div>Username: {{ profile.username }}</div>
-	<div>Name: {{ profile.name }}</div>
-	<div>
-		<button (click)="viewProfile(profile.username)">View Profile</button>
-		<button *ngIf="!isConnected(profile.username) && !isReceived(profile.username)" (click)="sendRequest(profile.username)">Request Connection</button>
-		<button *ngIf="isReceived(profile.username)" (click)="acceptRequest(profile.username)">Accept Request</button>
+<div class="flex-container">
+	<div class="half-container">
+		<div *ngIf="profile">
+			<div class="ui vertical segment">
+				<div class="ui huge header">{{ profile?.name }}</div>
+				<!-- <div>{{ profile?.username }}</div> -->
+				<div class="ui sub large header">DOB</div><div>{{ profile?.dob }}</div>
+				<div class="ui sub large header">Gender</div><div>{{ profile?.gender }}</div>
+				<div class="ui sub large header">Address</div>
+				<div>
+					<span>{{ profile?.address?.street }},</span>
+					<span>{{ profile?.address?.city  }}</span><br />
+					<span>{{ profile?.address?.state }},</span>
+					<span>{{ profile?.address?.country }}</span><br />
+					<span>{{ profile?.address?.pinCode  }}</span>
+				</div>
+				<br />
+			</div>
+			<br />
+		</div>
+		<div *ngIf="connections?.pending?.received.length > 0">
+			<div class="ui header">Requests</div>
+			<div class="connections ui segment" *ngFor="let received of connections?.pending?.received">{{received.username}}
+				<div class="connection-options">
+					<button class="ui mini button" (click)="getUserProfile(received.username)">View Profile</button>
+					<button class="ui mini positive button" (click)="acceptRequest(received.username)">Accept</button>
+					<button class="ui mini negative button" (click)="declineRequest(received.username)">Decline</button>
+				</div>
+			</div>
+			<br />
+		</div>
+		<div *ngIf="connections?.pending?.sent.length > 0">
+			<div class="ui header">Sent Requests</div>
+			<div class="connections ui segment" *ngFor="let sent of connections?.pending?.sent">{{sent.username}}
+				<div class="connection-options">
+					<button class="ui mini button" (click)="getUserProfile(sent.username)">View Profile</button>
+				</div>
+			</div>
+			<br />
+		</div>
+		<div *ngIf="connections?.connected.length > 0">
+			<div class="ui header">Connected</div>
+			<div class="connections ui segment" *ngFor="let connected of connections?.connected">{{connected.username}}
+				<div class="connection-options">
+					<button class="ui mini button" (click)="getUserProfile(connected.username)">View Profile</button>
+					<button class="ui mini negative button" (click)="removeConnection(connected.username)">Remove Connection</button>
+				</div>
+			</div>
+			<br />
+		</div>
+
 	</div>
-	<br />
+	<div class="half-container">
+		<form (submit)="onSearchSubmit()">
+		    <div class="ui search">
+		        <div class="ui icon input fluid">
+		    		<input type="text" placeholder="Search Users..." name="searchString" autocomplete="off" (keyup)="onSearchSubmit()" [(ngModel)]="searchString" />
+		            <i class="search icon"></i>
+		        </div>
+		    </div>
+		</form>
+		<div *ngFor="let profile of profiles">
+			<div class="card-container">
+				<div class="ui fluid card">
+					<div class="content">
+						<div class="header">{{ profile.name }}</div>
+						<div>Username: {{ profile.username }}</div>
+						<br />
+						<div class="extra content right floated">
+							<button class="ui tiny button" (click)="viewProfile(profile.username)">View Profile</button>
+							<button class="ui tiny positive button" *ngIf="!isConnected(profile.username) && !isReceived(profile.username)" (click)="sendRequest(profile.username)">Request Connection</button>
+							<button class="ui tiny button" *ngIf="isReceived(profile.username)" (click)="acceptRequest(profile.username)">Accept Request</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

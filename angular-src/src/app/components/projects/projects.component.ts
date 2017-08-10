@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
-
+declare var $:any;
 
 interface Address {
   street: String,
@@ -19,7 +19,6 @@ interface Profile {
   gender:  String,
   address: Address
 }
-
 
   interface Project {
     projectName: String;
@@ -73,19 +72,19 @@ export class ProjectsComponent implements OnInit {
       projectName: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.required, Validators.maxLength(300)]],
       private: Boolean,
-      tags: this._fb.array([
-          this.initTag(),
-      ]),
-      languages: this._fb.array([
-          this.initLanguage(),
-      ])
+      tags: this._fb.array([]),
+      languages: this._fb.array([])
     });
 
   }
 
+  openAddProjectModal() {
+    $('.ui.modal').modal('show');
+  }
+
   initTag() {
         return this._fb.group({
-            tag: ['', Validators.required]
+            tag: ['']
         });
     }
 
@@ -101,7 +100,7 @@ export class ProjectsComponent implements OnInit {
 
   initLanguage() {
         return this._fb.group({
-            language: ['', Validators.required]
+            language: ['']
         });
     }
 
@@ -119,6 +118,7 @@ export class ProjectsComponent implements OnInit {
 
     this.authService.addProject(newProject).subscribe(data => {
       if(data.success) {
+        this.projectForm.reset();
         this.flashMessage.show(data.msg, {cssClass: 'color-success', timeout: 3000});
         this.authService.getProjects().subscribe(projects => {
         this.projects = projects;

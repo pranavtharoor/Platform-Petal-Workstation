@@ -1,0 +1,52 @@
+.card-container {
+	margin: 10px 0;
+}
+
+.flex-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.button {
+	margin-left: 6px;
+}
+
+.half-container {
+	padding: 20px 8vw;
+	width: 50%;
+}
+
+.connections {
+	margin: 20px 0 20px 20px;
+}
+
+.connection-options {
+	margin-top: 10px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+@media screen and (max-width: 1110px) {
+
+	.half-container {
+		padding: 20px 5vw;
+	}
+
+}
+
+@media screen and (max-width: 780px) {
+
+	.half-container {
+		display: block;
+		width: 100%;
+	}
+
+	.connections {
+		margin: 10px 0 10px 10px;
+	}
+
+	.connection-options {
+		margin-top: 0px;
+	}
+
+}

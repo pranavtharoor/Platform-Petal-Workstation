@@ -11,6 +11,13 @@ export class AuthService {
 
   constructor(private http: Http) { }
 
+  getJwt() {
+    let headers = new Headers();
+    headers.append('Content-type', 'application/json');
+    return this.http.get('http://localhost:3000/getjwt', {headers: headers})
+    .map(res => res.json());
+  }
+
   registerUser(user) {
   	let headers = new Headers();
   	headers.append('Content-type', 'application/json');
@@ -260,6 +267,15 @@ export class AuthService {
   }
 
 // Profile
+
+  getUserProfile(username) {
+    let headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-type', 'application/json');
+    return this.http.post('http://localhost:3000/users/getuserprofile', {username: username}, {headers: headers})
+    .map(res => res.json());
+  }
 
   getProfilesAfterSearch(searchString) {
     let headers = new Headers();

@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   		if(data.success) {
         this.authService.storeUserData(data.token, data.user);
         this.socketioService.login(data.token);
-  		  this.flashMessage.show('Logged in', {cssClass: 'color-success', timeout: 5000});
+  		  this.flashMessage.show('Logged in', {cssClass: 'color-success', timeout: 1000});
         if(data.user.lastlogin == 'never') {
           this.authService.setLastLogin().subscribe(success => {
             }, err => {
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['dashboard']);
         }
   		} else {
-  			this.flashMessage.show(data.msg, {cssClass: 'color-danger', timeout: 5000});
+  			this.flashMessage.show(data.msg, {cssClass: 'color-danger', timeout: 3000});
   			this.router.navigate(['login']);
   		}
   	});

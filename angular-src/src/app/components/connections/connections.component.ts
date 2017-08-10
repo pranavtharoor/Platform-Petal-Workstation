@@ -3,6 +3,8 @@ import { AuthService } from '../../services/auth.service';
 import { SocketioService } from '../../services/socketio.service';
 import { Subscription } from 'rxjs/Subscription';
 
+declare var $:any;
+
 interface Address {
   street: String,
   city:  String,
@@ -97,21 +99,22 @@ export class ConnectionsComponent implements OnInit {
   }
 
   onSearchSubmit() {
-    this.authService.getProfile().subscribe(profile => {
-      this.username = profile.username;
-      this.authService.getProfilesAfterSearch(this.searchString).subscribe(profiles => {
-        var pos = profiles.findIndex((element) => {
-         return element.username == this.username;
+    if(this.searchString)
+      this.authService.getProfile().subscribe(profile => {
+        this.username = profile.username;
+        this.authService.getProfilesAfterSearch(this.searchString).subscribe(profiles => {
+          var pos = profiles.findIndex((element) => {
+           return element.username == this.username;
+          });
+          if (pos >= 0)
+            profiles.splice(pos, 1);
+          this.profiles = profiles;
+        }, err => {
+          console.log(err);
         });
-        if (pos >= 0)
-          profiles.splice(pos, 1);
-        this.profiles = profiles;
       }, err => {
         console.log(err);
       });
-    }, err => {
-      console.log(err);
-    });
 
   }
 
@@ -145,7 +148,19 @@ export class ConnectionsComponent implements OnInit {
 
   viewProfile(username) {
     this.profile = this.profiles.find((element) => {
+        $('html, body').animate({
+          scrollTop: $('body').offset().top
+          }, 500);
          return element.username == username;
+    });
+  }
+
+  getUserProfile(username) {
+    this.authService.getUserProfile(username).subscribe(profile => {
+      this.profile = profile;
+        $('html, body').animate({
+          scrollTop: $('body').offset().top
+          }, 500);
     });
   }
 

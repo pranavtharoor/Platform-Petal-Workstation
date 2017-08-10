@@ -5,6 +5,8 @@ import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { SocketioService } from '../../services/socketio.service';
 import { Subscription } from 'rxjs/Subscription';
 
+declare var $:any;
+
 interface Address {
   street: String,
   city:  String,
@@ -36,6 +38,7 @@ export class MyProjectsComponent implements OnInit {
   invites: Object;
   teams: Object[];
   userIsCreator: Boolean;
+  canLeave: Boolean;
   subscription: Subscription;
   message: String;
 
@@ -101,8 +104,12 @@ export class MyProjectsComponent implements OnInit {
 
   viewProject(projectName, creator) {
     this.authService.getProject(projectName, creator).subscribe(project => {
+      $('html, body').animate({
+          scrollTop: $('body').offset().top
+          }, 500);
       this.project = project;
     	this.userIsCreator = true;
+      this.canLeave = false;
     });
   }
 
@@ -121,6 +128,7 @@ export class MyProjectsComponent implements OnInit {
       this.authService.getTeams().subscribe(data => {
         this.invites = data.invites;
         this.teams = data.teams;
+        this.canLeave = true;
       }, err => {
         console.log(err);
       });
@@ -144,8 +152,23 @@ export class MyProjectsComponent implements OnInit {
   getProject(projectName, creator) {
   	this.authService.getProject(projectName, creator).subscribe(project => {
   		this.project = project;
-  		this.userIsCreator = false;
+      $('html, body').animate({
+          scrollTop: $('body').offset().top
+          }, 500);
+  		this.canLeave = true;
+      this.userIsCreator = false;
   	});
+  }
+
+  getProjectFromInvite(projectName, creator) {
+    this.authService.getProject(projectName, creator).subscribe(project => {
+      this.project = project;
+      $('html, body').animate({
+          scrollTop: $('body').offset().top
+          }, 500);
+      this.canLeave = false;
+      this.userIsCreator = false;
+    });
   }
 
   removeMemberFromProject(projectName, member) {
@@ -170,13 +193,18 @@ export class MyProjectsComponent implements OnInit {
     });
   }
 
-  isInTeam(username) {
-    for(var i = 0; i < this.project['team'].length; i++) {
+  isInTeamOrRequested(username) {
+    var flag = false;
+    for(var i = 0; i < this.project['team'].length; i++)
       if(this.project['team'][i].username == username) 
-        return true;
-      else
-        return false;
-    }
+        flag = true;
+    for(var i = 0; i < this.project['pending'].length; i++)
+      if(this.project['pending'][i].username == username) 
+        flag = true;
+    for(var i = 0; i < this.project['requests'].length; i++)
+      if(this.project['requests'][i].username == username) 
+        flag = true;
+      return flag;
   }
 
   acceptRequestToJoinTeam(sender, projectName) {

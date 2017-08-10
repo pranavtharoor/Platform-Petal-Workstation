@@ -6,6 +6,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const config = require('./config/database');
 const http = require('http');
+var session = require('express-session');
 
 // Database connection
 
@@ -34,6 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.use(bodyParser.json());
+
+app.use(session({secret: 'secretstuff'}));
 
 app.use(passport.initialize());
 app.use(passport.session());

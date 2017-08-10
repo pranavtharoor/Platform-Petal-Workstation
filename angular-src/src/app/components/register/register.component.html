@@ -1,8 +1,27 @@
-<form (submit)="onRegisterSubmit()">
-	Name: <input [(ngModel)]="name" name="name" type="text" /><br />
-	Username: <input [(ngModel)]="username" name="username" type="text" /><br />
-	Email: <input [(ngModel)]="email" name="email" type="text" /><br />
-	Password: <input [(ngModel)]="password" name="password" type="password" /><br />
-	Confirm Password: <input [(ngModel)]="repassword" type="password" name="repassword" /><br />
-	<input type="submit" value="Register"/>
-</form>
+<div class="ui text container">
+	<br />
+	<div class="ui center aligned large header"> Sign up</div>
+	<form (submit)="onRegisterSubmit()" class="ui form">
+		<div class="field">
+			<label>Name</label>
+			<input [(ngModel)]="name" placeholder="Name" name="name" type="text" /><br />
+		</div>
+		<div class="field">
+			<label>Username</label>
+			<input [(ngModel)]="username" name="username" type="text" placeholder="Username" />
+		</div>
+		<div class="field">
+			<label>Email</label>
+			<input [(ngModel)]="email" name="email" type="text" placeholder="Email" />
+		</div>
+		<div class="field">
+			<label>Password</label>
+			<input [(ngModel)]="password" name="password" type="password" placeholder="Password" />
+		</div>
+		<div class="field">
+			<label>Confirm Password</label>
+			<input [(ngModel)]="repassword" type="password" name="repassword" placeholder="Confirm Password" />
+		</div>
+		<input class="ui large button" type="submit" value="Register"/>
+	</form>
+</div>

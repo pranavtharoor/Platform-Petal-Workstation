@@ -1,14 +1,22 @@
-<div *ngIf="profile">
-	<div *ngIf="profile.name">Name:{{ profile.name }}</div>
-	<div *ngIf="profile.dob">DOB:{{ profile.dob }}</div>
-	<div *ngIf="profile.gender">Gender:{{ profile.gender }}</div>
-	<div *ngIf="profile.address">
-		Address:
-		<div *ngIf="profile.address.street">{{ profile.address.street }}</div>
-		<div *ngIf="profile.address.city">{{ profile.address.city }}</div>
-		<div *ngIf="profile.address.state">{{ profile.address.state }}</div>
-		<div *ngIf="profile.address.country">{{ profile.address.country }}</div>
-		<div *ngIf="profile.address.pinCode">{{ profile.address.state }}</div>
+<br />
+<div class="ui text container">
+	<div *ngIf="profile">
+	
+		<a class="ui button" id="edit-profile" href="/editprofile">Edit</a>
+		
+		<div class="ui huge header" *ngIf="profile.name">{{ profile.name }}</div>
+		<div class="ui sub header" *ngIf="profile.dob">DOB</div>
+		<div>{{ profile.dob }}</div>
+		<div class="ui sub header" *ngIf="profile.gender">Gender</div>
+		<div>{{ profile.gender }}</div>
+		<div class="ui sub header">Address</div>
+		<div *ngIf="profile.address">
+			<span *ngIf="profile.address.street">{{ profile.address.street }},</span>
+			<span *ngIf="profile.address.city">{{ profile.address.city }}</span><br />
+			<span *ngIf="profile.address.state">{{ profile.address.state }},</span>
+			<span *ngIf="profile.address.country">{{ profile.address.country }}</span><br />
+			<span *ngIf="profile.address.pinCode">{{ profile.address.pinCode }}</span>
+		</div>
+	
 	</div>
 </div>
-<a href="/editprofile">Edit</a>

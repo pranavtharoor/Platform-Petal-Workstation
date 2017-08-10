@@ -1,13 +1,66 @@
-Edit Profile<br />
-<form (submit)="onEditProfileSubmit()">
-	Name: <input type="text" name="email" [(ngModel)]="name" /><br />
-	DOB: <input type="text" name="dob" [(ngModel)]="dob" /><br />
-	Gender: <input type="text" name="gender" [(ngModel)]="gender" /><br />
-	Address: <br />
-	Street: <input type="text" name="street" [(ngModel)]="street" /><br />
-	City: <input type="text" name="city" [(ngModel)]="city" /><br />
-	State: <input type="text" name="state" [(ngModel)]="state" /><br />
-	Country: <input type="text" name="country" [(ngModel)]="country" /><br />
-	Pin Code: <input type="text" name="pinCode" [(ngModel)]="pinCode" /><br />
-	<input type="submit" />
-</form>
+<br /><br />
+<div class="ui text container">	
+	<div class="ui huge center aligned header">Edit Profile</div>
+	<br /><br />
+	<form class="ui form" (submit)="onEditProfileSubmit()">
+
+		<div class="field">
+			<label>Name</label>
+			<input placeholder="Name" type="text" name="email" [(ngModel)]="name" />
+		</div>
+		<div class="field">
+			<label>Date Of Birth</label>
+			<input type="date" name="dob" [(ngModel)]="dob" />
+		</div>
+
+<!-- 		<div class="inline fields">
+		    <label for="fruit">Gender</label>
+		    <div class="field">
+		      	<div class="ui radio checkbox">
+		       		<input type="radio" name="fruit" checked="" tabindex="0" class="hidden" />
+		        	<label>Male</label>
+		      	</div>
+		    </div>
+		    <div class="field">
+		      	<div class="ui radio checkbox">
+		        	<input type="radio" name="fruit" tabindex="0" class="hidden" />
+		  		    <label>Female</label>
+		        </div>
+		    </div>
+		</div> -->
+		<div class="field">
+			<label>Gender</label>
+			<input type="text" name="gender" [(ngModel)]="gender" />
+		</div>
+
+		<div class="field">
+		    <label>Address</label>
+		    <div class="two fields">
+		    	<div class="field">
+		        	<input placeholder="Street" type="text" name="street" [(ngModel)]="street" />
+		    	</div>
+		    	<div class="field">
+		        	<input placeholder="City" type="text" name="city" [(ngModel)]="city" />
+		        </div>
+		    </div>
+		    <div class="three fields">
+		    	<div class="field">
+		        	<input placeholder="State" type="text" name="state" [(ngModel)]="state" />
+		    	</div>
+		    	<div class="field">
+		        	<input placeholder="Country" type="text" name="country" [(ngModel)]="country" />
+		        </div>
+		        <div>
+		        	<input placeholder="Pin Code" type="text" name="pinCode" [(ngModel)]="pinCode" />
+		        </div>
+		    </div>
+		</div>
+
+		<input class="ui button" type="submit" />
+	</form>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />

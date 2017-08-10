@@ -6,10 +6,29 @@ body {
 	color: green;
 }
 
+.color-info {
+	color: white;
+	background-color: #5BC0DE;
+	border-style: solid;
+	border-color: #46B8DA;
+	border-radius: 5px 0 0 5px;
+	padding: 15px 35px;
+}
+
 .color-danger {
-	color: red;
+	color: white;
+	background-color: #D9534F;
+	border-style: solid;
+	border-color: #D43F3A;
+	border-radius: 5px 0 0 5px;
+	padding: 15px 35px;
 }
 
 .color-success {
-	color: green;
+	color: white;
+	background-color: #5CB85C;
+	border-style: solid;
+	border-color: #58B658;
+	border-radius: 5px 0 0 5px;
+	padding: 15px 35px;
 }

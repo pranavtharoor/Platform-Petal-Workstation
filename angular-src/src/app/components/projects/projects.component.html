@@ -1,81 +1,105 @@
-Add project:<br />
+<br /><br />
+<form class="ui modal" [formGroup]="projectForm" (ngSubmit)="save(projectForm._value)">
+   <div class="scrolling content">
+        <div class="ui center aligned large header">Add Project</div>
+        <div class="ui form text container">
+            <div class="field">
+                <label>Project Name</label>
+                <input placeholder="Project Name" type="text" formControlName="projectName">
+                <small *ngIf="!projectForm.controls.projectName.valid">
+                    Project name is required (maximum 50 characters).
+                </small>
+            </div>
 
-<form [formGroup]="projectForm" novalidate (ngSubmit)="save(projectForm._value)">
+            <div class="field">
+                <label>Description</label>
+                <textarea rows=5 placeholder="Description" type="text" formControlName="description"></textarea>
+                <small *ngIf="!projectForm.controls.description.valid">
+                    Description is required (maximum 300 characters).
+                </small>
+            </div>
 
-    <div>
-        <label>Project Name</label>
-        <input type="text" formControlName="projectName">
-        <small *ngIf="!projectForm.controls.projectName.valid">
-            Project name is required (maximum 50 characters).
-        </small>
-    </div>
+            <div class="field">
+                <label>Private&nbsp;&nbsp;&nbsp;
+                <input class="ui toggle checkbox" type="checkbox" name="private" formControlName="private"></label>
+            </div>
 
-    <div>
-        <label>Description</label>
-        <input type="text" formControlName="description">
-        <small *ngIf="!projectForm.controls.description.valid">
-            Description is required (maximum 300 characters).
-        </small>
-    </div>
+            <div class="ui stackable two column grid">
+                <div class="four column wide">
+                    <div class="field" formArrayName="tags">
+                        <label>Tags</label>
+                        <div *ngFor="let tag of projectForm.controls.tags.controls; let i=index">
+                            <div class="ui mini input" [formGroupName]="i">
+                                <span *ngIf="projectForm.controls.tags.controls.length > 0" 
+                                    (click)="removeTag(i)"><i class="large close icon"></i>
+                                </span>
+                                <input type="text" formControlName="tag">
+                            </div>
+                        </div>
+                        <a *ngIf="projectForm.controls.tags.controls.length < 5" (click)="addTag()"><i class="plus icon"></i></a>
+                    </div>
+                </div>
+                <div class="four column wide">
+                    <div class="field" formArrayName="languages">
+                        <label>Languages</label>
+                        <div *ngFor="let language of projectForm.controls.languages.controls; let i=index">
+                            <div class="ui mini input" [formGroupName]="i">
+                                <span *ngIf="projectForm.controls.languages.controls.length > 0" 
+                                    (click)="removeLanguage(i)"><i class="large close icon"></i>
+                                </span>
+                                 <input type="text" formControlName="language">
+                            </div>
+                        </div>
+                        <a (click)="addLanguage()"><i class="plus icon"></i></a>
+                    </div>
+                </div>
 
-    <div>
-        <label>Private</label>
-        <input type="checkbox" name="private" formControlName="private">
-    </div>
-
-    <div formArrayName="tags">
-    Tags
-        <div *ngFor="let tag of projectForm.controls.tags.controls; let i=index">
-            <span>
-                <span *ngIf="projectForm.controls.tags.controls.length > 1" 
-                    (click)="removeTag(i)">X
-                </span>
-            </span>
-
-            <span [formGroupName]="i">
-                 <input type="text" formControlName="tag">
-            </span>
+            </div>
+            <br /><br />
         </div>
-        <a *ngIf="projectForm.controls.tags.controls.length < 5" (click)="addTag()">+</a>
     </div>
-
-    <div formArrayName="languages">
-    Languages
-        <div *ngFor="let language of projectForm.controls.languages.controls; let i=index">
-            <span>
-                <span *ngIf="projectForm.controls.languages.controls.length > 1" 
-                    (click)="removeLanguage(i)">X
-                </span>
-            </span>
-
-            <span [formGroupName]="i">
-                 <input type="text" formControlName="language">
-            </span>
+    <div class="actions">
+        <div class="ui black deny button" (click)="this.projectForm.reset()">
+            Discard
         </div>
-        <a (click)="addLanguage()">+</a>
+        <button class="ui positive right labeled icon button" type="submit" [disabled]="!projectForm.valid">Submit
+        <i class="checkmark icon"></i>
+        </button>
     </div>
-    <button type="submit" [disabled]="!projectForm.valid">Submit</button>
-</form>
-<br /><br />
-<br /><br />
-<form (submit)="onSearchSubmit()">
-    Search: <input type="text" name="searchString" (keyup)="onSearchSubmit()" [(ngModel)]="searchString" />
-    <!-- <input type="submit" /> -->
 </form>
 
-<br /><br />
-Projects:
-<br /><br />
-<div *ngFor="let project of projects">
-	<div>Project Name: {{ project.projectName }}</div>
-	<div>Description: {{ project.description }}</div>
-	<div>Project by: {{ project.name }}</div>
-	<div>Languages: 
-        <span *ngFor="let language of project.languages">{{ language }} </span>
+<button id="add-button" class="ui button" (click)="openAddProjectModal()">Add Project</button>
+
+<div class="ui text container">
+    <div class="ui large center aligned header">Projects</div>
+    <div class="ui search">
+        <div class="ui icon input fluid">
+            <input placeholder="Search..." autocomplete="off" class="prompt" type="text" name="searchString" (keyup)="onSearchSubmit()" [(ngModel)]="searchString" />
+            <i class="search icon"></i>
+        </div>
     </div>
-	<div>Tags:
-        <span *ngFor="let tag of project.tags">{{ tag }} </span>
+    <br />
+
+<div class="ui card fluid" *ngFor="let project of projects">
+  <div class="content">
+    <div class="header">{{ project.projectName }}</div>
+  </div>
+  <div class="content">
+    <h4 class="ui sub header">Description</h4>
+    <div class="ui small feed">
+        {{ project.description }}
     </div>
-    <button (click)="requestJoinProject(project.projectName, project.name)">Join</button>
-	<br />
+        <div>Project by: {{ project.name }}</div>
+        <div>Languages: 
+            <span *ngFor="let language of project.languages">{{ language }} </span>
+        </div>
+        <div>Tags:
+            <span *ngFor="let tag of project.tags">{{ tag }} </span>
+        </div>
+  </div>
+  <div class="extra content">
+    <button (click)="requestJoinProject(project.projectName, project.name)" class="ui button">Join Project</button>
+  </div>
+</div>
+<br /><br /><br />
 </div>

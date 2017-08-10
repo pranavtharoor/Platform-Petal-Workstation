@@ -79,6 +79,18 @@ module.exports = (io) => {
 		});
 	});
 
+	router.post('/getuserprofile', passport.authenticate('jwt', {session: false}), (req, res) => {
+	
+		Profile.getProfileByUsername(req.body.username, (err, profile) => {
+			if(err) throw err;
+			if(profile) {
+				return res.json(profile);
+			} else {
+				res.json({success: false});
+			}
+		});
+	});
+
 	router.post('/updateprofile', passport.authenticate('jwt', {session: false}), (req, res) => {
 		let newProfile = new Profile({
 			username: req.user.username,
